@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - OpoAlert</title>
+    <title>Login - OpoAlert</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -79,9 +79,7 @@
         }
         
         input[type="email"],
-        input[type="password"],
-        input[type="text"],
-        select {
+        input[type="password"] {
             width: 100%;
             padding: 15px;
             border: 2px solid #ddd;
@@ -90,7 +88,7 @@
             transition: all 0.3s;
         }
         
-        input:focus, select:focus {
+        input:focus {
             border-color: var(--primary);
             outline: none;
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
@@ -116,14 +114,6 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
-        .btn-premium {
-            background: var(--accent);
-        }
-        
-        .btn-premium:hover {
-            background: #c0392b;
-        }
-        
         .auth-footer {
             text-align: center;
             padding: 20px;
@@ -141,56 +131,33 @@
             text-decoration: underline;
         }
         
-        .plan-card {
-            background: var(--light);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--primary);
-        }
-        
-        .plan-card.premium {
-            border-left-color: var(--accent);
-            background: linear-gradient(135deg, #fff 0%, #ffeaa7 100%);
-        }
-        
-        .plan-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .plan-title i {
-            margin-right: 10px;
-        }
-        
-        .plan-features {
-            list-style: none;
-            margin: 15px 0;
-        }
-        
-        .plan-features li {
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .plan-features li i {
-            color: var(--success);
-            margin-right: 10px;
-        }
-        
-        .price {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--secondary);
+        .social-login {
+            margin-top: 20px;
             text-align: center;
-            margin: 15px 0;
         }
         
-        .price.premium {
-            color: var(--accent);
+        .social-btn {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--light);
+            margin: 0 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+        
+        .social-btn.google { color: #DB4437; }
+        .social-btn.github { color: #333; }
+        .social-btn.facebook { color: #4267B2; }
+        
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
         @media (max-width: 480px) {
@@ -214,11 +181,11 @@
             <div class="logo">
                 <i class="fas fa-bell"></i> OpoAlert
             </div>
-            <p>Regístrate para comenzar a monitorizar</p>
+            <p>Bienvenido de vuelta</p>
         </div>
         
         <div class="auth-body">
-            <form id="register-form" action="/api/register" method="POST">
+            <form id="login-form" action="/api/login" method="POST">
                 <div class="form-group">
                     <label for="email"><i class="fas fa-envelope"></i> Email</label>
                     <input type="email" id="email" name="email" placeholder="tu@email.com" required>
@@ -226,58 +193,38 @@
                 
                 <div class="form-group">
                     <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
-                    <input type="password" id="password" name="password" placeholder="Mínimo 8 caracteres" required minlength="8">
+                    <input type="password" id="password" name="password" placeholder="Tu contraseña" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="plan"><i class="fas fa-crown"></i> Plan de suscripción</label>
-                    <select id="plan" name="plan">
-                        <option value="free">Free - 5 webs (Gratis)</option>
-                        <option value="premium">Premium - Ilimitado (3€/mes)</option>
-                    </select>
+                    <label>
+                        <input type="checkbox" name="remember"> Recordar sesión
+                    </label>
+                    <a href="#" style="float: right; color: var(--primary);">¿Olvidaste tu contraseña?</a>
                 </div>
                 
-                <div class="plan-card">
-                    <div class="plan-title">
-                        <i class="fas fa-star"></i> Plan Free
-                    </div>
-                    <ul class="plan-features">
-                        <li><i class="fas fa-check"></i> Hasta 5 webs monitorizadas</li>
-                        <li><i class="fas fa-check"></i> Notificaciones por Telegram</li>
-                        <li><i class="fas fa-check"></i> Verificación cada 24 horas</li>
-                        <li><i class="fas fa-times"></i> Sin publicidad</li>
-                    </ul>
-                </div>
-                
-                <div class="plan-card premium">
-                    <div class="plan-title">
-                        <i class="fas fa-crown"></i> Plan Premium
-                    </div>
-                    <div class="price premium">3€/mes</div>
-                    <ul class="plan-features">
-                        <li><i class="fas fa-check"></i> Webs ilimitadas</li>
-                        <li><i class="fas fa-check"></i> Notificaciones por Telegram y Email</li>
-                        <li><i class="fas fa-check"></i> Verificación cada 6 horas</li>
-                        <li><i class="fas fa-check"></i> Sin publicidad</li>
-                        <li><i class="fas fa-check"></i> Soporte prioritario</li>
-                    </ul>
-                </div>
-                
-                <button type="submit" class="btn">Crear Cuenta</button>
+                <button type="submit" class="btn">Iniciar Sesión</button>
             </form>
+            
+            <div class="social-login">
+                <p>O inicia sesión con:</p>
+                <a href="#" class="social-btn google"><i class="fab fa-google"></i></a>
+                <a href="#" class="social-btn github"><i class="fab fa-github"></i></a>
+                <a href="#" class="social-btn facebook"><i class="fab fa-facebook-f"></i></a>
+            </div>
         </div>
         
         <div class="auth-footer">
-            ¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a>
+            ¿No tienes cuenta? <a href="register.html">Regístrate aquí</a>
         </div>
     </div>
 
     <script>
-        document.getElementById('register-form').addEventListener('submit', function(e) {
+        document.getElementById('login-form').addEventListener('submit', function(e) {
             e.preventDefault();
             // Aquí iría la validación y envío del formulario
-            alert('¡Cuenta creada con éxito! Serás redirigido al login.');
-            window.location.href = 'login.html';
+            alert('¡Inicio de sesión exitoso!');
+            window.location.href = 'index.html';
         });
     </script>
 </body>
