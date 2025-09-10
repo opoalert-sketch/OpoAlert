@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpoAlert - Monitor de Cambios Web</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 0;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        
+        nav ul li a:hover, 
+        nav ul li a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 15px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .user-welcome {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .user-plan {
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .user-plan.free {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .user-plan.premium {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-user {
+            color: white;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+        }
+        
+        .btn-user:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .btn-user.logout:hover {
+            background: #e74c3c;
+        }
+        
+        .user-auth-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-login, .btn-register {
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-login {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        .btn-register {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .btn-login:hover {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .btn-register:hover {
+            background: #ecf0f1;
+            transform: translateY(-2px);
+        }
+
+        /* Resto de estilos de la aplicación... */
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-title i {
+            margin-right: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input[type="url"],
+        input[type="email"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-group input {
+            margin-right: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .url-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .url-list th,
+        .url-list td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .url-list th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .url-list tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background-color: #e7f6e9;
+            color: #2e7d32;
+        }
+        
+        .status-inactive {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+        
+        .actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 16px;
+            color: var(--gray);
+            transition: color 0.3s;
+        }
+        
+        .actions button:hover {
+            color: var(--primary);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--gray);
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px;
+            }
+            
+            .user-info {
+                margin-top: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-bell"></i> OpoAlert
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">Inicio</a></li>
+                    <li><a href="#">Mis URLs</a></li>
+                    <li><a href="#">Configuración</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-info">
+                <% if (user) { %>
+                    <div class="user-welcome">
+                        <i class="fas fa-user"></i>
+                        Hola, <strong><%= user.email %></strong>
+                        <span class="user-plan <%= user.plan %>"><%= user.plan %></span>
+                    </div>
+                    <div class="user-actions">
+                        <a href="/account" class="btn-user"><i class="fas fa-cog"></i></a>
+                        <a href="/logout" class="btn-user logout"><i class="fas fa-sign-out-alt"></i></a>
+                    </div>
+                <% } else { %>
+                    <div class="user-auth-links">
+                        <a href="/login.html" class="btn-login">Iniciar Sesión</a>
+                        <a href="/register.html" class="btn-register">Registrarse</a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="hero">
+            <h1>Monitoriza cambios en páginas web</h1>
+            <p>Recibe notificaciones por email o Telegram cuando las páginas web que sigues se actualicen</p>
+        </section>
+
+        <!-- Resto del contenido de tu aplicación -->
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-plus"></i> Añadir nueva URL para monitorizar</h2>
+            <form id="url-form">
+                <div class="form-group">
+                    <label for="url">Dirección web (URL)</label>
+                    <input type="url" id="url" placeholder="https://ejemplo.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="check-frequency">Frecuencia de verificación</label>
+                    <select id="check-frequency">
+                        <option value="hourly">Cada hora</option>
+                        <option value="daily" selected>Una vez al día</option>
+                        <option value="weekly">Una vez por semana</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Método de notificación</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="email-notification" checked>
+                        <label for="email-notification">Email</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="telegram-notification">
+                        <label for="telegram-notification">Telegram</label>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="email-field">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" placeholder="tu@email.com">
+                </div>
+                
+                <div class="form-group" id="telegram-field" style="display: none;">
+                    <label for="telegram-user">Tu ID de Telegram</label>
+                    <input type="text" id="telegram-user" placeholder="@tu_usuario">
+                </div>
+                
+                <button type="submit" class="btn">Guardar y monitorizar</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-list"></i> Mis URLs monitorizadas</h2>
+            <table class="url-list">
+                <thead>
+                    <tr>
+                        <th>URL</th>
+                        <th>Estado</th>
+                        <th>Notificaciones</th>
+                        <th>Última comprobación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>https://www.example.com</td>
+                        <td><span class="status status-active">Activo</span></td>
+                        <td>Email</td>
+                        <td>2023-05-15 10:30</td>
+                        <td class="actions">
+                            <button title="Editar"><i class="fas fa-edit"></i></button>
+                            <button title="Eliminar"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>OpoAlert &copy; 2023 - Monitoriza cambios en tus páginas web favoritas</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript para manejar el formulario
+        document.addEventListener('DOMContentLoaded', function() {
+            const telegramCheckbox = document.getElementById('telegram-notification');
+            const telegramField = document.getElementById('telegram-field');
+            
+            telegramCheckbox.addEventListener('change', function() {
+                telegramField.style.display = this.checked ? 'block' : 'none';
+            });
+            
+            const urlForm = document.getElementById('url-form');
+            urlForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('URL añadida correctamente');
+            });
+        });
+    </script>
+</body>
+</html>
