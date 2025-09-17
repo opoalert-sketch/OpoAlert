@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precios - OpoAlert</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ... (estilos existentes) ... */
+    </style>
+</head>
+<body>
+    <header>
+        <!-- ... (header existente) ... -->
+    </header>
+
+    <div class="container">
+        <div class="pricing-hero">
+            <h1>Planes y Precios</h1>
+            <p>Elige el plan perfecto para tus necesidades de monitorización</p>
+        </div>
+
+        <div class="pricing-cards">
+            <!-- Plan Free -->
+            <div class="pricing-card">
+                <h3><i class="fas fa-star"></i> Plan Free</h3>
+                <div class="price">Gratis</div>
+                <p>Ideal para empezar a monitorizar tus primeras webs</p>
+                
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> <strong>5 webs</strong> monitorizadas</li>
+                    <li><i class="fas fa-check"></i> Notificaciones por <strong>Telegram</strong></li>
+                    <li><i class="fas fa-check"></i> Verificación cada <strong>24 horas</strong></li>
+                    <li><i class="fas fa-check"></i> Historial de 7 días</li>
+                    <li><i class="fas fa-times"></i> Sin publicidad</li>
+                    <li><i class="fas fa-times"></i> Soporte prioritario</li>
+                </ul>
+                
+                <a href="/register.html?plan=free" class="btn-pricing btn-free">
+                    <i class="fas fa-user-plus"></i> Empezar Gratis
+                </a>
+            </div>
+
+            <!-- Plan Premium -->
+            <div class="pricing-card popular">
+                <div class="popular-badge">MÁS POPULAR</div>
+                <h3><i class="fas fa-crown"></i> Plan Premium</h3>
+                <div class="price popular">3€<span>/mes</span></div>
+                <p>Para usuarios que necesitan monitorización avanzada</p>
+                
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> <strong>Webs ilimitadas</strong></li>
+                    <li><i class="fas fa-check"></i> Notificaciones por <strong>Telegram y Email</strong></li>
+                    <li><i class="fas fa-check"></i> Verificación cada <strong>6 horas</strong></li>
+                    <li><i class="fas fa-check"></i> Historial ilimitado</li>
+                    <li><i class="fas fa-check"></i> <strong>Sin publicidad</strong></li>
+                    <li><i class="fas fa-check"></i> Soporte prioritario 24/7</li>
+                </ul>
+                
+                <button onclick="startPremiumPayment()" class="btn-pricing btn-premium">
+                    <i class="fas fa-credit-card"></i> Contratar Premium
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>OpoAlert &copy; 2023 - Monitoriza cambios en tus páginas web favoritas</p>
+        </div>
+    </footer>
+
+    <script>
+        function startPremiumPayment() {
+            if (confirm('¿Quieres contratar el plan Premium por 3€/mes?\n\nSerás redirigido a PayPal para completar el pago.')) {
+                // Redirigir al proceso de pago
+                window.location.href = '/account';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Cuenta - OpoAlert</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ... (mantener todos los estilos existentes) ... */
+        
+        .upgrade-section {
+            background: linear-gradient(135deg, #ffeaa7, #ffd8a8);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: center;
+            border: 2px solid #f39c12;
+        }
+        
+        .upgrade-section h3 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+        
+        .payment-security {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- ... (header existente) ... -->
+    </header>
+
+    <div class="container">
+        <div class="account-header">
+            <h1><i class="fas fa-user-cog"></i> Panel de Control</h1>
+            <p>Gestiona tus webs monitorizadas y configuración</p>
+        </div>
+
+        <!-- SECCIÓN DE UPGRADE PARA USUARIOS FREE -->
+        <% if (user.plan === 'free') { %>
+        <div class="upgrade-section">
+            <h3><i class="fas fa-crown"></i> ¡Conviértete en Premium!</h3>
+            <p>Elimina anuncios y disfruta de features exclusivas por solo 3€/mes</p>
+            
+            <div style="margin: 20px 0;">
+                <div style="font-size: 2rem; font-weight: bold; color: #e74c3c;">
+                    3€<small style="font-size: 1rem; color: #7f8c8d;">/mes</small>
+                </div>
+            </div>
+            
+            <button onclick="upgradeToPremium()" class="btn" style="background: #e74c3c; color: white; padding: 15px 30px;">
+                <i class="fas fa-credit-card"></i> Upgrade a Premium
+            </button>
+            
+            <p class="payment-security">
+                <i class="fas fa-lock"></i> Pago seguro con PayPal
+            </p>
+        </div>
+        <% } %>
+
+        <div class="account-stats">
+            <!-- ... (stats existentes) ... -->
+        </div>
+
+        <div class="urls-section">
+            <!-- ... (URLs existentes) ... -->
+        </div>
+
+        <div class="history-section">
+            <!-- ... (historial existente) ... -->
+        </div>
+    </div>
+
+    <!-- ANUNCIOS SOLO PARA FREE -->
+    <% if (user.plan === 'free') { %>
+    <div class="ads-container" style="background: #f8f9fa; border-top: 1px solid #e9ecef; padding: 20px; margin-top: 40px;">
+        <div class="container">
+            <div style="text-align: center;">
+                <h4 style="color: #6c757d; margin-bottom: 15px;">
+                    <i class="fas fa-ad"></i> Anuncio
+                </h4>
+                <div style="background: white; padding: 20px; border-radius: 10px; border: 1px dashed #ddd;">
+                    <p style="margin: 0; color: #6c757d;">
+                        🚀 <strong>¿Cansado de anuncios?</strong> 
+                        <a href="/pricing.html" style="color: #3498db; text-decoration: none;">
+                            Hazte Premium por solo 3€/mes
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+
+    <footer>
+        <div class="container">
+            <p>OpoAlert &copy; 2023 - Monitoriza cambios en tus páginas web favoritas</p>
+        </div>
+    </footer>
+
+    <script>
+        async function upgradeToPremium() {
+            if (confirm('¿Quieres mejorar a Premium por 3€/mes?\n\n✅ Webs ilimitadas\n✅ Sin anuncios\n✅ Notificaciones por email\n✅ Soporte prioritario')) {
+                try {
+                    const response = await fetch('/api/upgrade-to-premium', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        alert('¡Felicidades! Ahora eres usuario Premium 🎉');
+                        window.location.href = data.redirect;
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                } catch (error) {
+                    alert('Error de conexión. Intenta nuevamente.');
+                }
+            }
+        }
+
+        async function deleteUrl(urlId) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta URL?')) {
+                try {
+                    const response = await fetch(`/api/urls/${urlId}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        alert('URL eliminada correctamente');
+                        location.reload();
+                    } else {
+                        alert('Error al eliminar la URL');
+                    }
+                } catch (error) {
+                    alert('Error de conexión');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
