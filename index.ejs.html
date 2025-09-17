@@ -1,0 +1,116 @@
+<!-- Mantener todo el código anterior y actualizar el formulario: -->
+
+<div class="card">
+    <h2 class="card-title"><i class="fas fa-plus"></i> Añadir nueva URL para monitorizar</h2>
+    <form id="url-form">
+        <div class="form-group">
+            <label for="url">Dirección web (URL)</label>
+            <input type="url" id="url" placeholder="https://ejemplo.com" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="check-frequency">Frecuencia de verificación</label>
+            <input type="text" id="check-frequency" value="Todos los días a las 12:00" disabled 
+                   style="background: #f0f0f0; color: #666;">
+            <small style="color: var(--success);">
+                <i class="fas fa-info-circle"></i> Las verificaciones se realizan automáticamente a las 12:00
+            </small>
+        </div>
+        
+        <div class="form-group">
+            <label>Método de notificación</label>
+            <div class="checkbox-group">
+                <input type="checkbox" id="email-notification" checked>
+                <label for="email-notification">Email</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="telegram-notification">
+                <label for="telegram-notification">Telegram</label>
+            </div>
+        </div>
+        
+        <div class="form-group" id="email-field">
+            <label for="email">Correo electrónico para notificaciones</label>
+            <input type="email" id="email" placeholder="tu@email.com">
+        </div>
+        
+        <div class="form-group" id="telegram-field" style="display: none;">
+            <label for="telegram-user">Tu ID de Telegram</label>
+            <input type="text" id="telegram-user" placeholder="@tu_usuario">
+        </div>
+        
+        <button type="submit" class="btn">Guardar y monitorizar</button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const telegramCheckbox = document.getElementById('telegram-notification');
+    const telegramField = document.getElementById('telegram-field');
+    const emailCheckbox = document.getElementById('email-notification');
+    const emailField = document.getElementById('email-field');
+    
+    telegramCheckbox.addEventListener('change', function() {
+        telegramField.style.display = this.checked ? 'block' : 'none';
+        if (!this.checked && !emailCheckbox.checked) {
+            emailCheckbox.checked = true;
+            emailField.style.display = 'block';
+        }
+    });
+    
+    emailCheckbox.addEventListener('change', function() {
+        emailField.style.display = this.checked ? 'block' : 'none';
+        if (!this.checked && !telegramCheckbox.checked) {
+            telegramCheckbox.checked = true;
+            telegramField.style.display = 'block';
+        }
+    });
+    
+    const urlForm = document.getElementById('url-form');
+    urlForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const url = document.getElementById('url').value;
+        const email = document.getElementById('email').value;
+        const telegramUser = document.getElementById('telegram-user').value;
+        const emailNotification = document.getElementById('email-notification').checked;
+        const telegramNotification = document.getElementById('telegram-notification').checked;
+        
+        // Determinar tipo de notificación
+        let notificationType = 'email';
+        if (emailNotification && telegramNotification) {
+            notificationType = 'both';
+        } else if (telegramNotification) {
+            notificationType = 'telegram';
+        }
+        
+        try {
+            const response = await fetch('/api/urls', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    url: url,
+                    notificationEmail: email,
+                    telegramId: telegramUser,
+                    notificationType: notificationType
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                alert('URL añadida correctamente. Se verificará diariamente a las 12:00.');
+                urlForm.reset();
+                // Redirigir al panel de cuenta
+                window.location.href = '/account';
+            } else {
+                alert('Error: ' + data.error);
+            }
+        } catch (error) {
+            alert('Error de conexión. Intenta nuevamente.');
+        }
+    });
+});
+</script>

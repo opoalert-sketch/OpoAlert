@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Cuenta - OpoAlert</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 0;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        
+        nav ul li a:hover, 
+        nav ul li a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 15px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Estilos para el panel de cuenta */
+        .account-header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .account-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+        
+        .urls-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .url-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .url-list th,
+        .url-list td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .url-list th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .url-list tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background-color: #e7f6e9;
+            color: #2e7d32;
+        }
+        
+        .status-inactive {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .btn-danger {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .notification-time {
+            background: #e3f2fd;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-bell"></i> OpoAlert
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/account" class="active">Mi Cuenta</a></li>
+                    <li><a href="/pricing.html">Precios</a></li>
+                    <li><a href="/help.html">Ayuda</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-info">
+                <div class="user-welcome">
+                    <i class="fas fa-user"></i>
+                    Hola, <strong><%= user.email %></strong>
+                    <span class="user-plan <%= user.plan %>"><%= user.plan %></span>
+                </div>
+                <div class="user-actions">
+                    <a href="/logout" class="btn-user logout"><i class="fas fa-sign-out-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="account-header">
+            <h1><i class="fas fa-user-cog"></i> Panel de Control</h1>
+            <p>Gestiona tus webs monitorizadas y configuración</p>
+        </div>
+
+        <div class="account-stats">
+            <div class="stat-card">
+                <i class="fas fa-link fa-2x"></i>
+                <h3>Webs Monitorizadas</h3>
+                <div class="stat-number"><%= urls.length %>/5</div>
+                <small>Límite de tu plan</small>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-clock fa-2x"></i>
+                <h3>Próxima Verificación</h3>
+                <div class="stat-number">12:00</div>
+                <small>Hoy</small>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-bell fa-2x"></i>
+                <h3>Notificaciones</h3>
+                <div class="stat-number">0</div>
+                <small>Hoy</small>
+            </div>
+        </div>
+
+        <div class="urls-section">
+            <h2><i class="fas fa-list"></i> Mis URLs Monitorizadas</h2>
+            
+            <% if (urls.length === 0) { %>
+                <div style="text-align: center; padding: 40px; color: var(--gray);">
+                    <i class="fas fa-inbox fa-3x" style="margin-bottom: 20px;"></i>
+                    <h3>No tienes URLs monitorizadas</h3>
+                    <p>Ve a la página principal para añadir tu primera URL</p>
+                    <a href="/" class="btn" style="background: var(--primary); color: white; margin-top: 20px;">
+                        <i class="fas fa-plus"></i> Añadir URL
+                    </a>
+                </div>
+            <% } else { %>
+                <table class="url-list">
+                    <thead>
+                        <tr>
+                            <th>URL</th>
+                            <th>Notificaciones</th>
+                            <th>Última Verificación</th>
+                            <th>Próxima Verificación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% urls.forEach(function(url) { %>
+                        <tr>
+                            <td><%= url.url %></td>
+                            <td>
+                                <% if (url.notificationType === 'email') { %>
+                                    Email: <%= url.notificationEmail %>
+                                <% } else if (url.notificationType === 'telegram') { %>
+                                    Telegram
+                                <% } else { %>
+                                    Ambas
+                                <% } %>
+                            </td>
+                            <td>
+                                <% if (url.lastChecked) { %>
+                                    <%= new Date(url.lastChecked).toLocaleString() %>
+                                <% } else { %>
+                                    Nunca
+                                <% } %>
+                            </td>
+                            <td>
+                                <span class="notification-time">12:00 (diario)</span>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger" onclick="deleteUrl('<%= url._id %>')">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+        async function deleteUrl(urlId) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta URL?')) {
+                try {
+                    const response = await fetch(`/api/urls/${urlId}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        alert('URL eliminada correctamente');
+                        location.reload();
+                    } else {
+                        alert('Error al eliminar la URL');
+                    }
+                } catch (error) {
+                    alert('Error de conexión');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
