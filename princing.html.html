@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precios - OpoAlert</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        nav ul li a:hover {
+            opacity: 0.8;
+        }
+        
+        .pricing-hero {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .pricing-hero h1 {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+        
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        
+        .pricing-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            border: 2px solid #eee;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .pricing-card.popular {
+            border-color: var(--accent);
+            transform: scale(1.05);
+            position: relative;
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+        
+        .price.popular {
+            color: var(--accent);
+        }
+        
+        .price span {
+            font-size: 1rem;
+            color: var(--gray);
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .pricing-features li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .pricing-features li i {
+            color: var(--success);
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        
+        .btn-pricing {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .btn-free {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-premium {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-pricing:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .pricing-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.popular {
+                transform: none;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-bell"></i> OpoAlert
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/pricing.html" class="active">Precios</a></li>
+                    <li><a href="/help.html">Ayuda</a></li>
+                    <li><a href="/contact.html">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="pricing-hero">
+            <h1>Planes y Precios</h1>
+            <p>Elige el plan perfecto para tus necesidades de monitorización</p>
+        </div>
+
+        <div class="pricing-cards">
+            <!-- Plan Free -->
+            <div class="pricing-card">
+                <h3>Plan Free</h3>
+                <div class="price">Gratis</div>
+                <p>Ideal para empezar a monitorizar tus primeras webs</p>
+                
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> <strong>5 webs</strong> monitorizadas</li>
+                    <li><i class="fas fa-check"></i> Notificaciones por <strong>Telegram</strong></li>
+                    <li><i class="fas fa-check"></i> Verificación cada <strong>24 horas</strong></li>
+                    <li><i class="fas fa-check"></i> Historial de 7 días</li>
+                    <li><i class="fas fa-times"></i> Sin publicidad</li>
+                    <li><i class="fas fa-times"></i> Soporte prioritario</li>
+                </ul>
+                
+                <a href="/register.html?plan=free" class="btn-pricing btn-free">Empezar Gratis</a>
+            </div>
+
+            <!-- Plan Premium (POPULAR) -->
+            <div class="pricing-card popular">
+                <div class="popular-badge">RECOMENDADO</div>
+                <h3>Plan Premium</h3>
+                <div class="price popular">3€<span>/mes</span></div>
+                <p>Para usuarios que necesitan monitorización avanzada</p>
+                
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> <strong>Webs ilimitadas</strong></li>
+                    <li><i class="fas fa-check"></i> Notificaciones por <strong>Telegram y Email</strong></li>
+                    <li><i class="fas fa-check"></i> Verificación cada <strong>6 horas</strong></li>
+                    <li><i class="fas fa-check"></i> Historial ilimitado</li>
+                    <li><i class="fas fa-check"></i> <strong>Sin publicidad</strong></li>
+                    <li><i class="fas fa-check"></i> Soporte prioritario 24/7</li>
+                </ul>
+                
+                <a href="/register.html?plan=premium" class="btn-pricing btn-premium">Contratar Premium</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
