@@ -4,84 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ayuda - OpoAlert</title>
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #2c3e50;
-            --accent: #e74c3c;
-            --success: #2ecc71;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f7ff;
-            color: var(--dark);
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 20px 0;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo i {
-            margin-right: 10px;
-            font-size: 28px;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 20px;
-        }
-        
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.3s;
-        }
-        
-        nav ul li a:hover {
-            opacity: 0.8;
-        }
-        
+        /* Estilos específicos para help.html */
         .help-container {
             background: white;
             border-radius: 10px;
@@ -145,28 +71,6 @@
             font-family: inherit;
         }
         
-        .btn {
-            background: var(--primary);
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-        
-        .btn:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-        }
-        
-        .btn i {
-            margin-right: 10px;
-        }
-        
         .back-link {
             display: inline-block;
             margin-top: 30px;
@@ -183,28 +87,48 @@
             margin-right: 8px;
         }
         
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px;
-            color: var(--gray);
+        .faq-section {
+            margin-top: 40px;
+            padding-top: 30px;
             border-top: 1px solid #eee;
         }
         
+        .faq-title {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .faq-item {
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 15px;
+            background: var(--light);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 15px;
+            max-height: 300px;
+        }
+        
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            nav ul {
-                margin-top: 15px;
-            }
-            
-            nav ul li {
-                margin: 0 10px;
-            }
-            
             .help-container {
                 margin: 20px;
                 padding: 30px 20px;
@@ -221,11 +145,33 @@
             <nav>
                 <ul>
                     <li><a href="/">Inicio</a></li>
-                    <li><a href="/pricing.html">Precios</a></li>
-                    <li><a href="/help.html" class="active">Ayuda</a></li>
-                    <li><a href="/contact.html">Contacto</a></li>
+                    <li><a href="/pricing">Precios</a></li>
+                    <li><a href="/help" class="active">Ayuda</a></li>
+                    <li><a href="/contact">Contacto</a></li>
                 </ul>
             </nav>
+            
+            <% if (typeof user !== 'undefined' && user) { %>
+                <div class="user-info">
+                    <div class="user-welcome">
+                        <i class="fas fa-user"></i>
+                        Hola, <strong><%= user.email %></strong>
+                        <span class="user-plan <%= user.plan %>"><%= user.plan %></span>
+                    </div>
+                    <a href="/logout" class="btn" style="background: var(--accent); padding: 8px 15px;">
+                        <i class="fas fa-sign-out-alt"></i> Salir
+                    </a>
+                </div>
+            <% } else { %>
+                <div class="user-info">
+                    <a href="/login" class="btn" style="margin-right: 10px;">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                    </a>
+                    <a href="/register" class="btn" style="background: var(--success);">
+                        <i class="fas fa-user-plus"></i> Registrarse
+                    </a>
+                </div>
+            <% } %>
         </div>
     </header>
 
@@ -268,6 +214,57 @@
                 </button>
             </form>
             
+            <!-- Sección de Preguntas Frecuentes -->
+            <div class="faq-section">
+                <h2 class="faq-title">
+                    <i class="fas fa-comments"></i> Preguntas Frecuentes
+                </h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        ¿Cómo monitoreo una página web?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Para monitorear una página, simplemente ingresa la URL en la página principal, 
+                        selecciona la frecuencia de verificación y el método de notificación preferido.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        ¿Con qué frecuencia se verifican los cambios?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Depende de tu plan. El plan Free verifica cada 24 horas, el plan Basic cada 6 horas 
+                        y el plan Premium cada hora. Puedes cambiar tu plan en cualquier momento.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        ¿Qué métodos de notificación están disponibles?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Actualmente ofrecemos notificaciones por email. Próximamente añadiremos 
+                        notificaciones por Telegram y SMS para planes superiores.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        ¿Puedo monitorear páginas con acceso restringido?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Actualmente solo podemos monitorear páginas públicas accesibles sin autenticación. 
+                        El monitoreo de páginas con acceso restringido está en nuestra hoja de ruta futura.
+                    </div>
+                </div>
+            </div>
+            
             <a href="/" class="back-link">
                 <i class="fas fa-arrow-left"></i> Volver al inicio
             </a>
@@ -276,11 +273,12 @@
 
     <footer>
         <div class="container">
-            <p>OpoAlert &copy; 2023 - Monitoriza cambios en tus páginas web favoritas</p>
+            <p>OpoAlert &copy; 2025 - Monitoriza cambios en tus páginas web favoritas</p>
         </div>
     </footer>
 
     <script>
+        // Función para enviar el formulario de ayuda
         document.getElementById('help-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -296,6 +294,21 @@
             alert('¡Gracias por tu mensaje! Te responderemos a la brevedad en ' + formData.email);
             this.reset();
         });
+        
+        // Función para toggle de FAQs
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            faqItem.classList.toggle('active');
+            
+            const icon = element.querySelector('i');
+            if (faqItem.classList.contains('active')) {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
     </script>
 </body>
 </html>
