@@ -6,12 +6,360 @@
     <title>Precios - OpoAlert</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ... (estilos existentes) ... */
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        nav ul li a:hover {
+            opacity: 0.8;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-welcome {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .user-plan {
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .user-plan.free {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .user-plan.premium {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .user-auth-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-login, .btn-register {
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-login {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        .btn-register {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .pricing-hero {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+        }
+        
+        .pricing-hero h1 {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+        
+        .pricing-hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        
+        .pricing-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            border: 2px solid #eee;
+            position: relative;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .pricing-card.popular {
+            border-color: var(--accent);
+            transform: scale(1.02);
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+        
+        .price.popular {
+            color: var(--accent);
+        }
+        
+        .price span {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: normal;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+            padding: 0;
+        }
+        
+        .pricing-features li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .pricing-features li i {
+            color: var(--success);
+            margin-right: 15px;
+            font-size: 18px;
+            width: 20px;
+        }
+        
+        .pricing-features li .fa-times {
+            color: var(--accent);
+        }
+        
+        .btn-pricing {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-free {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-premium {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-pricing:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .navigation-links {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--gray);
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .pricing-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.popular {
+                transform: none;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 10px;
+            }
+            
+            .user-info {
+                margin-top: 15px;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <!-- ... (header existente) ... -->
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-bell"></i> OpoAlert
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/pricing.html" class="active">Precios</a></li>
+                    <li><a href="/help.html">Ayuda</a></li>
+                    <li><a href="/contact.html">Contacto</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-info">
+                <% if (user) { %>
+                    <div class="user-welcome">
+                        <i class="fas fa-user"></i>
+                        Hola, <strong><%= user.email %></strong>
+                        <span class="user-plan <%= user.plan %>"><%= user.plan %></span>
+                    </div>
+                    <div class="user-actions">
+                        <a href="/account" class="btn-user"><i class="fas fa-cog"></i></a>
+                        <a href="/logout" class="btn-user"><i class="fas fa-sign-out-alt"></i></a>
+                    </div>
+                <% } else { %>
+                    <div class="user-auth-links">
+                        <a href="/login.html" class="btn-login">Iniciar Sesión</a>
+                        <a href="/register.html" class="btn-register">Registrarse</a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
     </header>
 
     <div class="container">
@@ -62,19 +410,30 @@
                 </button>
             </div>
         </div>
+
+        <div class="navigation-links">
+            <% if (user) { %>
+                <a href="/account" class="nav-link">
+                    <i class="fas fa-arrow-left"></i> Volver a Mi Cuenta
+                </a>
+            <% } else { %>
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i> Volver al Inicio
+                </a>
+            <% } %>
+        </div>
     </div>
 
     <footer>
         <div class="container">
-            <p>OpoAlert &copy; 2023 - Monitoriza cambios en tus páginas web favoritas</p>
+            <p>OpoAlert &copy; 2025 - Monitoriza cambios en tus páginas web favoritas</p>
         </div>
     </footer>
 
     <script>
         function startPremiumPayment() {
-            if (confirm('¿Quieres contratar el plan Premium por 3€/mes?\n\nSerás redirigido a PayPal para completar el pago.')) {
-                // Redirigir al proceso de pago
-                window.location.href = '/account';
+            if (confirm('¿Quieres contratar el plan Premium por 3€/mes?\n\nSerás redirigido a completar el pago.')) {
+                window.location.href = '/account?upgrade=premium';
             }
         }
     </script>
