@@ -6,125 +6,643 @@
     <title>Mi Cuenta - OpoAlert</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ... (mantener todos los estilos existentes) ... */
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+        }
         
-        .upgrade-section {
-            background: linear-gradient(135deg, #ffeaa7, #ffd8a8);
-            padding: 25px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        nav ul li a:hover {
+            opacity: 0.8;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-welcome {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .user-plan {
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .user-plan.free {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .user-plan.premium {
+            background: #f39c12;
+            color: white;
+        }
+        
+        /* Nuevos estilos para la página de cuenta */
+        .account-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .account-sidebar {
+            background: white;
             border-radius: 10px;
-            margin: 30px 0;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+        
+        .account-content {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .user-profile {
             text-align: center;
-            border: 2px solid #f39c12;
+            margin-bottom: 25px;
         }
         
-        .upgrade-section h3 {
-            color: #e74c3c;
-            margin-bottom: 15px;
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 2rem;
+            color: white;
         }
         
-        .payment-security {
-            font-size: 0.9rem;
-            color: #7f8c8d;
-            margin-top: 15px;
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu a:hover, 
+        .sidebar-menu a.active {
+            background: var(--light);
+            color: var(--primary);
+        }
+        
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="url"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: var(--accent);
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .url-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .url-list th,
+        .url-list td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .url-list th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .url-list tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background-color: #e7f6e9;
+            color: #2e7d32;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-error {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--gray);
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 968px) {
+            .account-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .account-sidebar {
+                order: 2;
+            }
+            
+            .account-content {
+                order: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 10px;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <!-- ... (header existente) ... -->
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-bell"></i> OpoAlert
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/pricing.html">Precios</a></li>
+                    <li><a href="/help.html">Ayuda</a></li>
+                    <li><a href="/contact.html">Contacto</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-info">
+                <div class="user-welcome">
+                    <i class="fas fa-user"></i>
+                    Hola, <strong><%= user.email %></strong>
+                    <span class="user-plan <%= user.plan %>"><%= user.plan %></span>
+                </div>
+                <a href="/logout" class="btn" style="background: var(--accent); padding: 8px 15px;">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </a>
+            </div>
+        </div>
     </header>
 
     <div class="container">
-        <div class="account-header">
-            <h1><i class="fas fa-user-cog"></i> Panel de Control</h1>
-            <p>Gestiona tus webs monitorizadas y configuración</p>
-        </div>
+        <div class="account-container">
+            <!-- Sidebar -->
+            <div class="account-sidebar">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3><%= user.email %></h3>
+                    <span class="user-plan <%= user.plan %>"><%= user.plan %></span>
+                </div>
+                
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active" onclick="showTab('urls')">
+                        <i class="fas fa-link"></i>Mis URLs
+                    </a></li>
+                    <li><a href="#" onclick="showTab('profile')">
+                        <i class="fas fa-user-cog"></i>Perfil
+                    </a></li>
+                    <li><a href="#" onclick="showTab('notifications')">
+                        <i class="fas fa-bell"></i>Notificaciones
+                    </a></li>
+                    <li><a href="/pricing.html">
+                        <i class="fas fa-crown"></i>Mejorar Plan
+                    </a></li>
+                    <li><a href="/">
+                        <i class="fas fa-home"></i>Volver al Inicio
+                    </a></li>
+                </ul>
+            </div>
 
-        <!-- SECCIÓN DE UPGRADE PARA USUARIOS FREE -->
-        <% if (user.plan === 'free') { %>
-        <div class="upgrade-section">
-            <h3><i class="fas fa-crown"></i> ¡Conviértete en Premium!</h3>
-            <p>Elimina anuncios y disfruta de features exclusivas por solo 3€/mes</p>
-            
-            <div style="margin: 20px 0;">
-                <div style="font-size: 2rem; font-weight: bold; color: #e74c3c;">
-                    3€<small style="font-size: 1rem; color: #7f8c8d;">/mes</small>
+            <!-- Contenido Principal -->
+            <div class="account-content">
+                <!-- Pestaña: Mis URLs -->
+                <div id="urls-tab" class="tab-content active">
+                    <h2 class="section-title">
+                        <i class="fas fa-link"></i>Mis URLs Monitorizadas
+                    </h2>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-globe fa-2x"></i>
+                            <div class="stat-number" id="total-urls">0</div>
+                            <small>Webs monitorizadas</small>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-check-circle fa-2x"></i>
+                            <div class="stat-number" id="active-urls">0</div>
+                            <small>Activas</small>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-clock fa-2x"></i>
+                            <div class="stat-number">12:00</div>
+                            <small>Próxima verificación</small>
+                        </div>
+                    </div>
+
+                    <div id="urls-container">
+                        <table class="url-list">
+                            <thead>
+                                <tr>
+                                    <th>URL</th>
+                                    <th>Estado</th>
+                                    <th>Notificaciones</th>
+                                    <th>Última verificación</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="urls-list">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 40px; color: var(--gray);">
+                                        <i class="fas fa-inbox fa-3x" style="margin-bottom: 15px;"></i>
+                                        <p>No tienes URLs monitorizadas</p>
+                                        <a href="/" class="btn" style="margin-top: 15px;">
+                                            <i class="fas fa-plus"></i>Añadir primera URL
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pestaña: Perfil -->
+                <div id="profile-tab" class="tab-content">
+                    <h2 class="section-title">
+                        <i class="fas fa-user-cog"></i>Configuración de Perfil
+                    </h2>
+                    
+                    <form id="profile-form">
+                        <div class="form-group">
+                            <label for="email">Email actual</label>
+                            <input type="email" id="email" value="<%= user.email %>" disabled>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="new-email">Nuevo email</label>
+                            <input type="email" id="new-email" placeholder="nuevo@email.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="current-password">Contraseña actual</label>
+                            <input type="password" id="current-password" placeholder="Para confirmar cambios">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="new-password">Nueva contraseña</label>
+                            <input type="password" id="new-password" placeholder="Dejar en blanco para no cambiar">
+                        </div>
+                        
+                        <button type="submit" class="btn">
+                            <i class="fas fa-save"></i>Guardar cambios
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Pestaña: Notificaciones -->
+                <div id="notifications-tab" class="tab-content">
+                    <h2 class="section-title">
+                        <i class="fas fa-bell"></i>Configuración de Notificaciones
+                    </h2>
+                    
+                    <form id="notifications-form">
+                        <div class="form-group">
+                            <label>Métodos de notificación preferidos</label>
+                            <div style="display: flex; gap: 20px; margin-top: 10px;">
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" name="email-notifications" checked style="margin-right: 8px;">
+                                    Email
+                                </label>
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" name="telegram-notifications" style="margin-right: 8px;">
+                                    Telegram
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="telegram-id">ID de Telegram</label>
+                            <input type="text" id="telegram-id" placeholder="@tu_usuario_de_telegram">
+                            <small>Para obtener tu ID de Telegram, escribe a @userinfobot en Telegram</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="notification-frequency">Frecuencia de notificaciones</label>
+                            <select id="notification-frequency">
+                                <option value="immediate">Inmediatas</option>
+                                <option value="daily">Resumen diario</option>
+                                <option value="both">Ambas</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn">
+                            <i class="fas fa-save"></i>Guardar configuración
+                        </button>
+                    </form>
                 </div>
             </div>
-            
-            <button onclick="upgradeToPremium()" class="btn" style="background: #e74c3c; color: white; padding: 15px 30px;">
-                <i class="fas fa-credit-card"></i> Upgrade a Premium
-            </button>
-            
-            <p class="payment-security">
-                <i class="fas fa-lock"></i> Pago seguro con PayPal
-            </p>
-        </div>
-        <% } %>
-
-        <div class="account-stats">
-            <!-- ... (stats existentes) ... -->
-        </div>
-
-        <div class="urls-section">
-            <!-- ... (URLs existentes) ... -->
-        </div>
-
-        <div class="history-section">
-            <!-- ... (historial existente) ... -->
         </div>
     </div>
-
-    <!-- ANUNCIOS SOLO PARA FREE -->
-    <% if (user.plan === 'free') { %>
-    <div class="ads-container" style="background: #f8f9fa; border-top: 1px solid #e9ecef; padding: 20px; margin-top: 40px;">
-        <div class="container">
-            <div style="text-align: center;">
-                <h4 style="color: #6c757d; margin-bottom: 15px;">
-                    <i class="fas fa-ad"></i> Anuncio
-                </h4>
-                <div style="background: white; padding: 20px; border-radius: 10px; border: 1px dashed #ddd;">
-                    <p style="margin: 0; color: #6c757d;">
-                        🚀 <strong>¿Cansado de anuncios?</strong> 
-                        <a href="/pricing.html" style="color: #3498db; text-decoration: none;">
-                            Hazte Premium por solo 3€/mes
-                        </a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <% } %>
 
     <footer>
         <div class="container">
-            <p>OpoAlert &copy; 2023 - Monitoriza cambios en tus páginas web favoritas</p>
+            <p>OpoAlert &copy; 2025 - Monitoriza cambios en tus páginas web favoritas</p>
         </div>
     </footer>
 
     <script>
-        async function upgradeToPremium() {
-            if (confirm('¿Quieres mejorar a Premium por 3€/mes?\n\n✅ Webs ilimitadas\n✅ Sin anuncios\n✅ Notificaciones por email\n✅ Soporte prioritario')) {
-                try {
-                    const response = await fetch('/api/upgrade-to-premium', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        alert('¡Felicidades! Ahora eres usuario Premium 🎉');
-                        window.location.href = data.redirect;
-                    } else {
-                        alert('Error: ' + data.error);
-                    }
-                } catch (error) {
-                    alert('Error de conexión. Intenta nuevamente.');
-                }
+        // Función para cambiar pestañas
+        function showTab(tabName) {
+            // Ocultar todas las pestañas
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostrar la pestaña seleccionada
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Actualizar menú activo
+            document.querySelectorAll('.sidebar-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Si es la pestaña de URLs, cargarlas
+            if (tabName === 'urls') {
+                loadUserUrls();
             }
+        }
+
+        // Cargar URLs del usuario
+        async function loadUserUrls() {
+            try {
+                const response = await fetch('/api/user/urls');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const urlsList = document.getElementById('urls-list');
+                    const totalUrls = document.getElementById('total-urls');
+                    const activeUrls = document.getElementById('active-urls');
+                    
+                    // Actualizar estadísticas
+                    totalUrls.textContent = data.urls.length;
+                    activeUrls.textContent = data.urls.filter(url => url.isActive).length;
+                    
+                    if (data.urls.length > 0) {
+                        urlsList.innerHTML = '';
+                        
+                        data.urls.forEach(url => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${url.url}</td>
+                                <td>
+                                    <span class="status status-${url.lastStatus || 'pending'}">
+                                        ${getStatusText(url.lastStatus)}
+                                    </span>
+                                </td>
+                                <td>${getNotificationTypeText(url.notificationType)}</td>
+                                <td>${url.lastChecked ? new Date(url.lastChecked).toLocaleString() : 'Nunca'}</td>
+                                <td>
+                                    <button class="btn btn-danger" onclick="deleteUrl('${url._id}')">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
+                                </td>
+                            `;
+                            urlsList.appendChild(row);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading URLs:', error);
+            }
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'success': 'Activa',
+                'pending': 'Pendiente',
+                'error': 'Error',
+                'changed': 'Con cambios'
+            };
+            return statusMap[status] || 'Pendiente';
+        }
+
+        function getNotificationTypeText(type) {
+            const typeMap = {
+                'email': 'Email',
+                'telegram': 'Telegram',
+                'both': 'Ambos'
+            };
+            return typeMap[type] || 'Email';
         }
 
         async function deleteUrl(urlId) {
@@ -138,66 +656,31 @@
                     
                     if (data.success) {
                         alert('URL eliminada correctamente');
-                        location.reload();
+                        loadUserUrls(); // Recargar la lista
                     } else {
-                        alert('Error al eliminar la URL');
+                        alert('Error: ' + data.error);
                     }
                 } catch (error) {
                     alert('Error de conexión');
                 }
             }
         }
+
+        // Formularios
+        document.getElementById('profile-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            alert('Funcionalidad de actualización de perfil en desarrollo');
+        });
+
+        document.getElementById('notifications-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            alert('Configuración de notificaciones guardada');
+        });
+
+        // Cargar URLs al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserUrls();
+        });
     </script>
-
-<!-- Añadir botones de navegación mejorados -->
-<div class="navigation-actions" style="margin: 20px 0; text-align: center;">
-    <a href="/" class="btn" style="background: var(--primary); margin-right: 10px;">
-        <i class="fas fa-home"></i> Inicio
-    </a>
-    <a href="/pricing.html" class="btn" style="background: var(--accent);">
-        <i class="fas fa-crown"></i> Mejorar Plan
-    </a>
-</div>
-
-<!-- Mejorar el script para cargar URLs -->
-<script>
-    // Cargar URLs al abrir la página
-    async function loadUserUrls() {
-        try {
-            const response = await fetch('/api/user/urls');
-            const data = await response.json();
-            
-            if (data.success && data.urls.length > 0) {
-                const urlsContainer = document.getElementById('urls-container');
-                urlsContainer.innerHTML = '';
-                
-                data.urls.forEach(url => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${url.url}</td>
-                        <td>
-                            <span class="status status-${url.lastStatus || 'inactive'}">
-                                ${url.lastStatus || 'Pendiente'}
-                            </span>
-                        </td>
-                        <td>${url.notificationType || 'email'}</td>
-                        <td>${url.lastChecked ? new Date(url.lastChecked).toLocaleString() : 'Nunca'}</td>
-                        <td>
-                            <button class="btn btn-danger" onclick="deleteUrl('${url._id}')">
-                                <i class="fas fa-trash"></i> Eliminar
-                            </button>
-                        </td>
-                    `;
-                    urlsContainer.appendChild(row);
-                });
-            }
-        } catch (error) {
-            console.error('Error loading URLs:', error);
-        }
-    }
-    
-    // Cargar URLs cuando la página se abre
-    document.addEventListener('DOMContentLoaded', loadUserUrls);
-</script>
 </body>
 </html>
