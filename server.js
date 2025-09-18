@@ -6,8 +6,6 @@ const path = require('path');
 const cron = require('node-cron');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const crypto = require('crypto');
-const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,7 +15,7 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname);
 
 // Middleware
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 app.use(session({
@@ -329,8 +327,9 @@ app.get('/logout', (req, res) => {
     });
 });
 
-// Función para generar hash del contenido
+// Función para generar hash del contenido (usando crypto nativo de Node.js)
 function generateHash(content) {
+    const crypto = require('crypto');
     return crypto.createHash('md5').update(content).digest('hex');
 }
 
