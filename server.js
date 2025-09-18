@@ -62,7 +62,6 @@ app.use(async (req, res, next) => {
                     email: user.email,
                     plan: user.plan
                 };
-                // Mostrar anuncios solo para free
                 res.locals.showAds = user.plan === 'free';
             } else {
                 res.locals.user = null;
@@ -295,7 +294,6 @@ app.post('/api/upgrade-to-premium', async (req, res) => {
     try {
         const db = client.db();
         
-        // Simular pago exitoso (en producción se validaría con PayPal)
         await db.collection('users').updateOne(
             { _id: new ObjectId(req.session.userId) },
             { 
@@ -307,7 +305,6 @@ app.post('/api/upgrade-to-premium', async (req, res) => {
             }
         );
 
-        // Actualizar sesión
         req.session.userPlan = 'premium';
         
         res.json({ 
@@ -319,39 +316,6 @@ app.post('/api/upgrade-to-premium', async (req, res) => {
     } catch (error) {
         console.error('Error upgrading to premium:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
-    }
-});
-
-// Ruta de webhook para PayPal (para producción)
-app.post('/api/webhook/paypal', async (req, res) => {
-    try {
-        console.log('Webhook de PayPal recibido:', req.body);
-        
-        // Aquí verificarías la firma del webhook con PayPal
-        const { event_type, resource } = req.body;
-        
-        if (event_type === 'PAYMENT.CAPTURE.COMPLETED') {
-            const userId = resource.custom_id;
-            const db = client.db();
-            
-            await db.collection('users').updateOne(
-                { _id: new ObjectId(userId) },
-                { 
-                    $set: { 
-                        plan: 'premium',
-                        premiumSince: new Date(),
-                        updatedAt: new Date()
-                    } 
-                }
-            );
-            
-            console.log(`Usuario ${userId} actualizado a Premium`);
-        }
-        
-        res.status(200).send('OK');
-    } catch (error) {
-        console.error('Error en webhook PayPal:', error);
-        res.status(500).send('Error');
     }
 });
 
@@ -457,70 +421,6 @@ async function checkUrl(urlData) {
     }
 }
 
-// Función para enviar notificaciones
-async function sendNotification(urlData, result) {
-    try {
-        const db = client.db();
-        const user = await db.collection('users').findOne({ 
-            _id: new ObjectId(urlData.userId) 
-        });
-        
-        if (!user) return;
-        
-        let message = '';
-        let subject = '';
-        
-        if (result.changed) {
-            subject = '🚀 ¡CAMBIO DETECTADO! - OpoAlert';
-            message = `¡CAMBIO DETECTADO!\n\nURL: ${urlData.url}\nHora: ${new Date().toLocaleString()}\n\nRevisa la página para ver los cambios.`;
-        } else if (result.error) {
-            subject = '❌ Error de verificación - OpoAlert';
-            message = `ERROR EN VERIFICACIÓN\n\nURL: ${urlData.url}\nHora: ${new Date().toLocaleString()}\nError: ${result.error}`;
-        } else {
-            subject = '✅ Verificación completada - OpoAlert';
-            message = `VERIFICACIÓN COMPLETADA\n\nURL: ${urlData.url}\nHora: ${new Date().toLocaleString()}\nEstado: Sin cambios`;
-        }
-        
-        // Enviar notificación por Email
-        if (urlData.notificationType === 'email' || urlData.notificationType === 'both') {
-            await sendEmailNotification(user.email, subject, message);
-        }
-        
-        // Enviar notificación por Telegram
-        if (urlData.notificationType === 'telegram' || urlData.notificationType === 'both') {
-            if (urlData.telegramId) {
-                await sendTelegramNotification(urlData.telegramId, message);
-            }
-        }
-        
-    } catch (error) {
-        console.error('Error enviando notificación:', error);
-    }
-}
-
-// Función para enviar email
-async function sendEmailNotification(to, subject, message) {
-    try {
-        console.log(`📧 Enviando email a: ${to}`);
-        console.log(`Asunto: ${subject}`);
-        console.log(`Mensaje: ${message}`);
-        
-    } catch (error) {
-        console.error('Error enviando email:', error);
-    }
-}
-
-// Función para enviar Telegram
-async function sendTelegramNotification(chatId, message) {
-    try {
-        console.log(`💬 Enviando Telegram a: ${chatId}`);
-        console.log(`Mensaje: ${message}`);
-        
-    } catch (error) {
-        console.error('Error enviando Telegram:', error);
-    }
-}
-
 // Programar la verificación diaria a las 12:00
 cron.schedule('0 12 * * *', async () => {
     console.log('⏰ Iniciando verificación diaria de URLs...');
@@ -536,7 +436,6 @@ cron.schedule('0 12 * * *', async () => {
         for (const urlData of urls) {
             try {
                 const result = await checkUrl(urlData);
-                await sendNotification(urlData, result);
                 
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 
@@ -559,9 +458,8 @@ async function startServer() {
     try {
         await connectDB();
         app.listen(PORT, () => {
-            console.log(`🚀 OpoAlert ejecutándose en http://localhost:${PORT}`);
+            console.log(`🚀 OpoAlert ejecutándose en puerto ${PORT}`);
             console.log('⏰ Verificación programada: 12:00 daily (Europe/Madrid)');
-            console.log('💳 Sistema de pagos PayPal integrado');
         });
     } catch (error) {
         console.error('Error iniciando servidor:', error);
