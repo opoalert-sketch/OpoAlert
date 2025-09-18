@@ -1,0 +1,5 @@
+<footer>
+    <div class="container">
+        <p>OpoAlert &copy; 2025 - Monitoriza cambios en tus páginas web favoritas</p>
+    </div>
+</footer>
