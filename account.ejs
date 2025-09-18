@@ -4,117 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Cuenta - OpoAlert</title>
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #2c3e50;
-            --accent: #e74c3c;
-            --success: #2ecc71;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f7ff;
-            color: var(--dark);
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 20px 0;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo i {
-            margin-right: 10px;
-            font-size: 28px;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 20px;
-        }
-        
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.3s;
-        }
-        
-        nav ul li a:hover {
-            opacity: 0.8;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .user-welcome {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-        
-        .user-plan {
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 11px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        
-        .user-plan.free {
-            background: #27ae60;
-            color: white;
-        }
-        
-        .user-plan.premium {
-            background: #f39c12;
-            color: white;
-        }
-        
-        /* Nuevos estilos para la página de cuenta */
+        /* Estilos específicos para account.ejs */
         .account-container {
             display: grid;
             grid-template-columns: 300px 1fr;
@@ -211,7 +104,8 @@
         input[type="text"],
         input[type="email"],
         input[type="password"],
-        input[type="url"] {
+        input[type="url"],
+        select {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid #ddd;
@@ -220,35 +114,10 @@
             transition: border-color 0.3s;
         }
         
-        input:focus {
+        input:focus,
+        select:focus {
             border-color: var(--primary);
             outline: none;
-        }
-        
-        .btn {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .btn:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-        }
-        
-        .btn-danger {
-            background: var(--accent);
-        }
-        
-        .btn-danger:hover {
-            background: #c0392b;
         }
         
         .url-list {
@@ -325,14 +194,6 @@
             margin: 10px 0;
         }
         
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px;
-            color: var(--gray);
-            border-top: 1px solid #eee;
-        }
-        
         @media (max-width: 968px) {
             .account-container {
                 grid-template-columns: 1fr;
@@ -346,51 +207,10 @@
                 order: 1;
             }
         }
-        
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            nav ul {
-                margin-top: 15px;
-                justify-content: center;
-            }
-            
-            nav ul li {
-                margin: 0 10px;
-            }
-        }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container header-content">
-            <div class="logo">
-                <i class="fas fa-bell"></i> OpoAlert
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="/">Inicio</a></li>
-                    <li><a href="/pricing.html">Precios</a></li>
-                    <li><a href="/help.html">Ayuda</a></li>
-                    <li><a href="/contact.html">Contacto</a></li>
-                </ul>
-            </nav>
-            
-            <div class="user-info">
-                <div class="user-welcome">
-                    <i class="fas fa-user"></i>
-                    Hola, <strong><%= user.email %></strong>
-                    <span class="user-plan <%= user.plan %>"><%= user.plan %></span>
-                </div>
-                <a href="/logout" class="btn" style="background: var(--accent); padding: 8px 15px;">
-                    <i class="fas fa-sign-out-alt"></i> Salir
-                </a>
-            </div>
-        </div>
-    </header>
+    <%- include('partials/header') %>
 
     <div class="container">
         <div class="account-container">
@@ -414,7 +234,7 @@
                     <li><a href="#" onclick="showTab('notifications')">
                         <i class="fas fa-bell"></i>Notificaciones
                     </a></li>
-                    <li><a href="/pricing.html">
+                    <li><a href="/pricing">
                         <i class="fas fa-crown"></i>Mejorar Plan
                     </a></li>
                     <li><a href="/">
@@ -461,15 +281,35 @@
                                 </tr>
                             </thead>
                             <tbody id="urls-list">
-                                <tr>
-                                    <td colspan="5" style="text-align: center; padding: 40px; color: var(--gray);">
-                                        <i class="fas fa-inbox fa-3x" style="margin-bottom: 15px;"></i>
-                                        <p>No tienes URLs monitorizadas</p>
-                                        <a href="/" class="btn" style="margin-top: 15px;">
-                                            <i class="fas fa-plus"></i>Añadir primera URL
-                                        </a>
-                                    </td>
-                                </tr>
+                                <% if (userUrls && userUrls.length > 0) { %>
+                                    <% userUrls.forEach(function(url) { %>
+                                        <tr>
+                                            <td><%= url.url %></td>
+                                            <td>
+                                                <span class="status status-<%= url.status || 'pending' %>">
+                                                    <%= getStatusText(url.status) %>
+                                                </span>
+                                            </td>
+                                            <td><%= getNotificationTypeText(url.notificationType) %></td>
+                                            <td><%= url.lastChecked ? new Date(url.lastChecked).toLocaleString() : 'Nunca' %></td>
+                                            <td>
+                                                <button class="btn btn-danger" onclick="deleteUrl('<%= url._id %>')">
+                                                    <i class="fas fa-trash"></i> Eliminar
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; padding: 40px; color: var(--gray);">
+                                            <i class="fas fa-inbox fa-3x" style="margin-bottom: 15px;"></i>
+                                            <p>No tienes URLs monitorizadas</p>
+                                            <a href="/" class="btn" style="margin-top: 15px;">
+                                                <i class="fas fa-plus"></i>Añadir primera URL
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <% } %>
                             </tbody>
                         </table>
                     </div>
@@ -553,11 +393,7 @@
         </div>
     </div>
 
-    <footer>
-        <div class="container">
-            <p>OpoAlert &copy; 2025 - Monitoriza cambios en tus páginas web favoritas</p>
-        </div>
-    </footer>
+    <%- include('partials/footer') %>
 
     <script>
         // Función para cambiar pestañas
@@ -575,57 +411,9 @@
                 link.classList.remove('active');
             });
             event.target.classList.add('active');
-            
-            // Si es la pestaña de URLs, cargarlas
-            if (tabName === 'urls') {
-                loadUserUrls();
-            }
         }
 
-        // Cargar URLs del usuario
-        async function loadUserUrls() {
-            try {
-                const response = await fetch('/api/user/urls');
-                const data = await response.json();
-                
-                if (data.success) {
-                    const urlsList = document.getElementById('urls-list');
-                    const totalUrls = document.getElementById('total-urls');
-                    const activeUrls = document.getElementById('active-urls');
-                    
-                    // Actualizar estadísticas
-                    totalUrls.textContent = data.urls.length;
-                    activeUrls.textContent = data.urls.filter(url => url.isActive).length;
-                    
-                    if (data.urls.length > 0) {
-                        urlsList.innerHTML = '';
-                        
-                        data.urls.forEach(url => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${url.url}</td>
-                                <td>
-                                    <span class="status status-${url.lastStatus || 'pending'}">
-                                        ${getStatusText(url.lastStatus)}
-                                    </span>
-                                </td>
-                                <td>${getNotificationTypeText(url.notificationType)}</td>
-                                <td>${url.lastChecked ? new Date(url.lastChecked).toLocaleString() : 'Nunca'}</td>
-                                <td>
-                                    <button class="btn btn-danger" onclick="deleteUrl('${url._id}')">
-                                        <i class="fas fa-trash"></i> Eliminar
-                                    </button>
-                                </td>
-                            `;
-                            urlsList.appendChild(row);
-                        });
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading URLs:', error);
-            }
-        }
-
+        // Funciones auxiliares para mostrar estados
         function getStatusText(status) {
             const statusMap = {
                 'success': 'Activa',
@@ -656,7 +444,7 @@
                     
                     if (data.success) {
                         alert('URL eliminada correctamente');
-                        loadUserUrls(); // Recargar la lista
+                        location.reload(); // Recargar la página para ver los cambios
                     } else {
                         alert('Error: ' + data.error);
                     }
@@ -675,11 +463,6 @@
         document.getElementById('notifications-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             alert('Configuración de notificaciones guardada');
-        });
-
-        // Cargar URLs al iniciar
-        document.addEventListener('DOMContentLoaded', function() {
-            loadUserUrls();
         });
     </script>
 </body>
