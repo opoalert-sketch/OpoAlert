@@ -223,6 +223,7 @@ app.post('/api/urls', async (req, res) => {
         const { url, notificationEmail, telegramId, notificationType } = req.body;
         const db = client.db();
         
+        // Verificar límite según plan
         const urlCount = await db.collection('urls').countDocuments({ 
             userId: req.session.userId 
         });
@@ -237,6 +238,19 @@ app.post('/api/urls', async (req, res) => {
             });
         }
         
+        // Verificar si la URL ya existe para este usuario
+        const existingUrl = await db.collection('urls').findOne({
+            userId: req.session.userId,
+            url: url
+        });
+        
+        if (existingUrl) {
+            return res.status(400).json({ 
+                error: 'Esta URL ya está siendo monitorizada' 
+            });
+        }
+        
+        // Guardar URL
         const result = await db.collection('urls').insertOne({
             userId: req.session.userId,
             url: url,
@@ -248,13 +262,14 @@ app.post('/api/urls', async (req, res) => {
             lastHash: '',
             lastStatus: 'pending',
             createdAt: new Date(),
+            updatedAt: new Date(),
             isActive: true
         });
         
         res.json({ 
             success: true, 
             message: 'URL añadida correctamente',
-            urlId: result.insertedId 
+            redirect: '/account'  // Redirigir a account en lugar de home
         });
         
     } catch (error) {
@@ -262,6 +277,27 @@ app.post('/api/urls', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
+
+// Nueva ruta para obtener URLs del usuario
+app.get('/api/user/urls', async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ error: 'No autorizado' });
+    }
+    
+    try {
+        const db = client.db();
+        const urls = await db.collection('urls')
+            .find({ userId: req.session.userId })
+            .sort({ createdAt: -1 })
+            .toArray();
+        
+        res.json({ success: true, urls });
+    } catch (error) {
+        console.error('Error fetching URLs:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
 
 // API para eliminar URLs
 app.delete('/api/urls/:id', async (req, res) => {
