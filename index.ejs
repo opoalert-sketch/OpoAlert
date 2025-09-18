@@ -1,116 +1,591 @@
-<!-- Mantener todo el código anterior y actualizar el formulario: -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpoAlert - Monitor de Cambios Web</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        nav ul li a:hover {
+            opacity: 0.8;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-welcome {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .user-plan {
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .user-plan.free {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .user-plan.premium {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-user {
+            color: white;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .btn-user:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .user-auth-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-login, .btn-register {
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-login {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        .btn-register {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .btn-login:hover {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .login-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: var(--success);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-title i {
+            margin-right: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input[type="url"],
+        input[type="email"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-group input {
+            margin-right: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .url-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .url-list th,
+        .url-list td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .url-list th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .url-list tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background-color: #e7f6e9;
+            color: #2e7d32;
+        }
+        
+        .status-inactive {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+        
+        .actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 16px;
+            color: var(--gray);
+            transition: color 0.3s;
+        }
+        
+        .actions button:hover {
+            color: var(--primary);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--gray);
+            border-top: 1px solid #eee;
+        }
+        
+        .ads-container {
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        
+        .ads-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 10px;
+            }
+            
+            .user-info {
+                margin-top: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Indicador de login -->
+    <% if (user) { %>
+    <div class="login-indicator">
+        <i class="fas fa-user-check"></i>
+        Conectado como: <%= user.email %>
+    </div>
+    <% } %>
 
-<div class="card">
-    <h2 class="card-title"><i class="fas fa-plus"></i> Añadir nueva URL para monitorizar</h2>
-    <form id="url-form">
-        <div class="form-group">
-            <label for="url">Dirección web (URL)</label>
-            <input type="url" id="url" placeholder="https://ejemplo.com" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="check-frequency">Frecuencia de verificación</label>
-            <input type="text" id="check-frequency" value="Todos los días a las 12:00" disabled 
-                   style="background: #f0f0f0; color: #666;">
-            <small style="color: var(--success);">
-                <i class="fas fa-info-circle"></i> Las verificaciones se realizan automáticamente a las 12:00
-            </small>
-        </div>
-        
-        <div class="form-group">
-            <label>Método de notificación</label>
-            <div class="checkbox-group">
-                <input type="checkbox" id="email-notification" checked>
-                <label for="email-notification">Email</label>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-bell"></i> OpoAlert
             </div>
-            <div class="checkbox-group">
-                <input type="checkbox" id="telegram-notification">
-                <label for="telegram-notification">Telegram</label>
+            <nav>
+                <ul>
+                    <li><a href="/" class="active">Inicio</a></li>
+                    <li><a href="/pricing.html">Precios</a></li>
+                    <li><a href="/help.html">Ayuda</a></li>
+                    <li><a href="/contact.html">Contacto</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-info">
+                <% if (user) { %>
+                    <div class="user-welcome">
+                        <i class="fas fa-user"></i>
+                        Hola, <strong><%= user.email %></strong>
+                        <span class="user-plan <%= user.plan %>"><%= user.plan %></span>
+                    </div>
+                    <div class="user-actions">
+                        <a href="/account" class="btn-user"><i class="fas fa-cog"></i></a>
+                        <a href="/logout" class="btn-user"><i class="fas fa-sign-out-alt"></i></a>
+                    </div>
+                <% } else { %>
+                    <div class="user-auth-links">
+                        <a href="/login.html" class="btn-login">Iniciar Sesión</a>
+                        <a href="/register.html" class="btn-register">Registrarse</a>
+                    </div>
+                <% } %>
             </div>
         </div>
-        
-        <div class="form-group" id="email-field">
-            <label for="email">Correo electrónico para notificaciones</label>
-            <input type="email" id="email" placeholder="tu@email.com">
-        </div>
-        
-        <div class="form-group" id="telegram-field" style="display: none;">
-            <label for="telegram-user">Tu ID de Telegram</label>
-            <input type="text" id="telegram-user" placeholder="@tu_usuario">
-        </div>
-        
-        <button type="submit" class="btn">Guardar y monitorizar</button>
-    </form>
-</div>
+    </header>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const telegramCheckbox = document.getElementById('telegram-notification');
-    const telegramField = document.getElementById('telegram-field');
-    const emailCheckbox = document.getElementById('email-notification');
-    const emailField = document.getElementById('email-field');
-    
-    telegramCheckbox.addEventListener('change', function() {
-        telegramField.style.display = this.checked ? 'block' : 'none';
-        if (!this.checked && !emailCheckbox.checked) {
-            emailCheckbox.checked = true;
-            emailField.style.display = 'block';
-        }
-    });
-    
-    emailCheckbox.addEventListener('change', function() {
-        emailField.style.display = this.checked ? 'block' : 'none';
-        if (!this.checked && !telegramCheckbox.checked) {
-            telegramCheckbox.checked = true;
-            telegramField.style.display = 'block';
-        }
-    });
-    
-    const urlForm = document.getElementById('url-form');
-    urlForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const url = document.getElementById('url').value;
-        const email = document.getElementById('email').value;
-        const telegramUser = document.getElementById('telegram-user').value;
-        const emailNotification = document.getElementById('email-notification').checked;
-        const telegramNotification = document.getElementById('telegram-notification').checked;
-        
-        // Determinar tipo de notificación
-        let notificationType = 'email';
-        if (emailNotification && telegramNotification) {
-            notificationType = 'both';
-        } else if (telegramNotification) {
-            notificationType = 'telegram';
-        }
-        
-        try {
-            const response = await fetch('/api/urls', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    url: url,
-                    notificationEmail: email,
-                    telegramId: telegramUser,
-                    notificationType: notificationType
-                })
+    <div class="container">
+        <section class="hero">
+            <h1>Monitoriza cambios en páginas web</h1>
+            <p>Recibe notificaciones por email o Telegram cuando las páginas web que sigues se actualicen</p>
+        </section>
+
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-plus"></i> Añadir nueva URL para monitorizar</h2>
+            <form id="url-form">
+                <div class="form-group">
+                    <label for="url">Dirección web (URL)</label>
+                    <input type="url" id="url" placeholder="https://ejemplo.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="check-frequency">Frecuencia de verificación</label>
+                    <input type="text" id="check-frequency" value="Todos los días a las 12:00" disabled 
+                           style="background: #f0f0f0; color: #666;">
+                    <small style="color: var(--success);">
+                        <i class="fas fa-info-circle"></i> Las verificaciones se realizan automáticamente a las 12:00
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label>Método de notificación</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="email-notification" checked>
+                        <label for="email-notification">Email</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="telegram-notification">
+                        <label for="telegram-notification">Telegram</label>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="email-field">
+                    <label for="email">Correo electrónico para notificaciones</label>
+                    <input type="email" id="email" placeholder="tu@email.com">
+                </div>
+                
+                <div class="form-group" id="telegram-field" style="display: none;">
+                    <label for="telegram-user">Tu ID de Telegram</label>
+                    <input type="text" id="telegram-user" placeholder="@tu_usuario">
+                </div>
+                
+                <button type="submit" class="btn">Guardar y monitorizar</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-list"></i> Mis URLs monitorizadas</h2>
+            <table class="url-list">
+                <thead>
+                    <tr>
+                        <th>URL</th>
+                        <th>Estado</th>
+                        <th>Notificaciones</th>
+                        <th>Última comprobación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="urls-container">
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 30px; color: var(--gray);">
+                            <i class="fas fa-inbox fa-3x" style="margin-bottom: 15px;"></i>
+                            <p>No tienes URLs monitorizadas todavía</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Anuncios para usuarios free -->
+    <% if (showAds) { %>
+    <div class="ads-container">
+        <div class="container">
+            <div class="ads-content">
+                <h4><i class="fas fa-ad"></i> Anuncio</h4>
+                <div style="background: white; padding: 20px; border-radius: 10px; border: 1px dashed #ddd;">
+                    <p style="margin: 0; color: var(--gray);">
+                        🚀 <strong>¿Cansado de anuncios?</strong> 
+                        <a href="/pricing.html" style="color: var(--primary); text-decoration: none;">
+                            Hazte Premium por solo 3€/mes
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+
+    <footer>
+        <div class="container">
+            <p>OpoAlert &copy; 2023 - Monitoriza cambios en tus páginas web favoritas</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const telegramCheckbox = document.getElementById('telegram-notification');
+            const telegramField = document.getElementById('telegram-field');
+            const emailCheckbox = document.getElementById('email-notification');
+            const emailField = document.getElementById('email-field');
+            
+            telegramCheckbox.addEventListener('change', function() {
+                telegramField.style.display = this.checked ? 'block' : 'none';
+                if (!this.checked && !emailCheckbox.checked) {
+                    emailCheckbox.checked = true;
+                    emailField.style.display = 'block';
+                }
             });
             
-            const data = await response.json();
+            emailCheckbox.addEventListener('change', function() {
+                emailField.style.display = this.checked ? 'block' : 'none';
+                if (!this.checked && !telegramCheckbox.checked) {
+                    telegramCheckbox.checked = true;
+                    telegramField.style.display = 'block';
+                }
+            });
             
-            if (data.success) {
-                alert('URL añadida correctamente. Se verificará diariamente a las 12:00.');
-                urlForm.reset();
-                // Redirigir al panel de cuenta
-                window.location.href = '/account';
-            } else {
-                alert('Error: ' + data.error);
-            }
-        } catch (error) {
-            alert('Error de conexión. Intenta nuevamente.');
-        }
-    });
-});
-</script>
+            const urlForm = document.getElementById('url-form');
+            urlForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const url = document.getElementById('url').value;
+                const email = document.getElementById('email').value;
+                const telegramUser = document.getElementById('telegram-user').value;
+                const emailNotification = document.getElementById('email-notification').checked;
+                const telegramNotification = document.getElementById('telegram-notification').checked;
+                
+                let notificationType = 'email';
+                if (emailNotification && telegramNotification) {
+                    notificationType = 'both';
+                } else if (telegramNotification) {
+                    notificationType = 'telegram';
+                }
+                
+                try {
+                    const response = await fetch('/api/urls', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            url: url,
+                            notificationEmail: email,
+                            telegramId: telegramUser,
+                            notificationType: notificationType
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        alert('URL añadida correctamente. Se verificará diariamente a las 12:00.');
+                        urlForm.reset();
+                        window.location.href = '/account';
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                } catch (error) {
+                    alert('Error de conexión. Intenta nuevamente.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
