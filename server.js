@@ -298,6 +298,25 @@ app.get('/api/user/urls', async (req, res) => {
     }
 });
 
+// Añadir esta ruta en server.js
+app.get('/api/user/urls', async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ error: 'No autorizado' });
+    }
+    
+    try {
+        const db = client.db();
+        const urls = await db.collection('urls')
+            .find({ userId: req.session.userId })
+            .sort({ createdAt: -1 })
+            .toArray();
+        
+        res.json({ success: true, urls });
+    } catch (error) {
+        console.error('Error fetching URLs:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
 
 // API para eliminar URLs
 app.delete('/api/urls/:id', async (req, res) => {
