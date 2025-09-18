@@ -148,5 +148,56 @@
             }
         }
     </script>
+
+<!-- Añadir botones de navegación mejorados -->
+<div class="navigation-actions" style="margin: 20px 0; text-align: center;">
+    <a href="/" class="btn" style="background: var(--primary); margin-right: 10px;">
+        <i class="fas fa-home"></i> Inicio
+    </a>
+    <a href="/pricing.html" class="btn" style="background: var(--accent);">
+        <i class="fas fa-crown"></i> Mejorar Plan
+    </a>
+</div>
+
+<!-- Mejorar el script para cargar URLs -->
+<script>
+    // Cargar URLs al abrir la página
+    async function loadUserUrls() {
+        try {
+            const response = await fetch('/api/user/urls');
+            const data = await response.json();
+            
+            if (data.success && data.urls.length > 0) {
+                const urlsContainer = document.getElementById('urls-container');
+                urlsContainer.innerHTML = '';
+                
+                data.urls.forEach(url => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${url.url}</td>
+                        <td>
+                            <span class="status status-${url.lastStatus || 'inactive'}">
+                                ${url.lastStatus || 'Pendiente'}
+                            </span>
+                        </td>
+                        <td>${url.notificationType || 'email'}</td>
+                        <td>${url.lastChecked ? new Date(url.lastChecked).toLocaleString() : 'Nunca'}</td>
+                        <td>
+                            <button class="btn btn-danger" onclick="deleteUrl('${url._id}')">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </td>
+                    `;
+                    urlsContainer.appendChild(row);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading URLs:', error);
+        }
+    }
+    
+    // Cargar URLs cuando la página se abre
+    document.addEventListener('DOMContentLoaded', loadUserUrls);
+</script>
 </body>
 </html>
