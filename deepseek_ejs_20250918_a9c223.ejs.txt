@@ -1,0 +1,26 @@
+<header>
+    <div class="container header-content">
+        <div class="logo">
+            <i class="fas fa-bell"></i> OpoAlert
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/pricing">Precios</a></li>
+                <li><a href="/help">Ayuda</a></li>
+                <li><a href="/contact">Contacto</a></li>
+            </ul>
+        </nav>
+        
+        <div class="user-info">
+            <div class="user-welcome">
+                <i class="fas fa-user"></i>
+                Hola, <strong><%= user.email %></strong>
+                <span class="user-plan <%= user.plan %>"><%= user.plan %></span>
+            </div>
+            <a href="/logout" class="btn" style="background: var(--accent); padding: 8px 15px;">
+                <i class="fas fa-sign-out-alt"></i> Salir
+            </a>
+        </div>
+    </div>
+</header>
