@@ -4,27 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - OpoAlert</title>
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ESTILOS IGUALES A LOS QUE YA TENÍAS */
-        :root {
-            --primary: #3498db;
-            --secondary: #2c3e50;
-            --accent: #e74c3c;
-            --success: #2ecc71;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
+        /* Estilos específicos para register.html */
         body {
             background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
             min-height: 100vh;
@@ -95,26 +78,6 @@
             border-color: var(--primary);
             outline: none;
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        }
-        
-        .btn {
-            width: 100%;
-            background: var(--primary);
-            color: white;
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-        
-        .btn:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
         .auth-footer {
@@ -244,6 +207,11 @@
                 </div>
                 
                 <div class="form-group">
+                    <label for="confirm-password"><i class="fas fa-lock"></i> Confirmar Contraseña</label>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Repite tu contraseña" required minlength="8">
+                </div>
+                
+                <div class="form-group">
                     <label for="plan"><i class="fas fa-crown"></i> Plan de suscripción</label>
                     <select id="plan" name="plan">
                         <option value="free">Free - 5 webs (Gratis)</option>
@@ -259,7 +227,7 @@
                         <li><i class="fas fa-check"></i> Hasta 5 webs monitorizadas</li>
                         <li><i class="fas fa-check"></i> Notificaciones por Telegram</li>
                         <li><i class="fas fa-check"></i> Verificación cada 24 horas</li>
-                        <li><i class="fas fa-times"></i> Sin publicidad</li>
+                        <li><i class="fas fa-check"></i> Historial de 7 días</li>
                     </ul>
                 </div>
                 
@@ -272,9 +240,16 @@
                         <li><i class="fas fa-check"></i> Webs ilimitadas</li>
                         <li><i class="fas fa-check"></i> Notificaciones por Telegram y Email</li>
                         <li><i class="fas fa-check"></i> Verificación cada 6 horas</li>
-                        <li><i class="fas fa-check"></i> Sin publicidad</li>
+                        <li><i class="fas fa-check"></i> Historial ilimitado</li>
                         <li><i class="fas fa-check"></i> Soporte prioritario</li>
                     </ul>
+                </div>
+                
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        Acepto los <a href="/terms" target="_blank">términos y condiciones</a> y la <a href="/privacy" target="_blank">política de privacidad</a>
+                    </label>
                 </div>
                 
                 <button type="submit" class="btn">Crear Cuenta</button>
@@ -282,7 +257,7 @@
         </div>
         
         <div class="auth-footer">
-            ¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a>
+            ¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a>
         </div>
     </div>
 
@@ -290,9 +265,21 @@
         document.getElementById('register-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
+            // Validar que las contraseñas coincidan
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                const notification = document.getElementById('notification');
+                notification.className = 'notification error';
+                notification.textContent = 'Las contraseñas no coinciden';
+                notification.style.display = 'block';
+                return;
+            }
+            
             const formData = {
                 email: document.getElementById('email').value,
-                password: document.getElementById('password').value,
+                password: password,
                 plan: document.getElementById('plan').value
             };
             
@@ -315,7 +302,7 @@
                     notification.style.display = 'block';
                     
                     setTimeout(() => {
-                        window.location.href = data.redirect;
+                        window.location.href = data.redirect || '/login?success=1';
                     }, 1500);
                 } else {
                     notification.className = 'notification error';
@@ -326,6 +313,26 @@
                 notification.className = 'notification error';
                 notification.textContent = 'Error de conexión. Intenta nuevamente.';
                 notification.style.display = 'block';
+            }
+        });
+
+        // Detectar parámetro de plan en la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const planParam = urlParams.get('plan');
+        
+        if (planParam === 'premium') {
+            document.getElementById('plan').value = 'premium';
+        }
+
+        // Validación de contraseñas en tiempo real
+        document.getElementById('confirm-password').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            
+            if (confirmPassword && password !== confirmPassword) {
+                this.style.borderColor = 'var(--accent)';
+            } else {
+                this.style.borderColor = '';
             }
         });
     </script>
