@@ -4,140 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Precios - OpoAlert</title>
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #2c3e50;
-            --accent: #e74c3c;
-            --success: #2ecc71;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f7ff;
-            color: var(--dark);
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 20px 0;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo i {
-            margin-right: 10px;
-            font-size: 28px;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 20px;
-        }
-        
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.3s;
-        }
-        
-        nav ul li a:hover {
-            opacity: 0.8;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .user-welcome {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-        
-        .user-plan {
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 11px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        
-        .user-plan.free {
-            background: #27ae60;
-            color: white;
-        }
-        
-        .user-plan.premium {
-            background: #f39c12;
-            color: white;
-        }
-        
-        .user-auth-links {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn-login, .btn-register {
-            padding: 8px 15px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .btn-login {
-            background: transparent;
-            border: 2px solid white;
-            color: white;
-        }
-        
-        .btn-register {
-            background: white;
-            color: var(--primary);
-        }
-        
+        /* Estilos específicos para pricing.html */
         .pricing-hero {
             text-align: center;
             margin-bottom: 50px;
@@ -288,12 +158,46 @@
             transform: translateY(-2px);
         }
         
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px;
-            color: var(--gray);
-            border-top: 1px solid #eee;
+        .user-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-user {
+            color: white;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .btn-user:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .user-auth-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-login, .btn-register {
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-login {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        .btn-register {
+            background: white;
+            color: var(--primary);
         }
         
         @media (max-width: 768px) {
@@ -303,25 +207,6 @@
             
             .pricing-card.popular {
                 transform: none;
-            }
-            
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            nav ul {
-                margin-top: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            nav ul li {
-                margin: 0 10px;
-            }
-            
-            .user-info {
-                margin-top: 15px;
             }
         }
     </style>
@@ -335,14 +220,14 @@
             <nav>
                 <ul>
                     <li><a href="/">Inicio</a></li>
-                    <li><a href="/pricing.html" class="active">Precios</a></li>
-                    <li><a href="/help.html">Ayuda</a></li>
-                    <li><a href="/contact.html">Contacto</a></li>
+                    <li><a href="/pricing" class="active">Precios</a></li>
+                    <li><a href="/help">Ayuda</a></li>
+                    <li><a href="/contact">Contacto</a></li>
                 </ul>
             </nav>
             
             <div class="user-info">
-                <% if (user) { %>
+                <% if (typeof user !== 'undefined' && user) { %>
                     <div class="user-welcome">
                         <i class="fas fa-user"></i>
                         Hola, <strong><%= user.email %></strong>
@@ -354,8 +239,8 @@
                     </div>
                 <% } else { %>
                     <div class="user-auth-links">
-                        <a href="/login.html" class="btn-login">Iniciar Sesión</a>
-                        <a href="/register.html" class="btn-register">Registrarse</a>
+                        <a href="/login" class="btn-login">Iniciar Sesión</a>
+                        <a href="/register" class="btn-register">Registrarse</a>
                     </div>
                 <% } %>
             </div>
@@ -384,9 +269,21 @@
                     <li><i class="fas fa-times"></i> Soporte prioritario</li>
                 </ul>
                 
-                <a href="/register.html?plan=free" class="btn-pricing btn-free">
-                    <i class="fas fa-user-plus"></i> Empezar Gratis
-                </a>
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <% if (user.plan === 'free') { %>
+                        <button class="btn-pricing btn-free" disabled>
+                            <i class="fas fa-check"></i> Plan Actual
+                        </button>
+                    <% } else { %>
+                        <a href="/account?downgrade=free" class="btn-pricing btn-free">
+                            <i class="fas fa-arrow-down"></i> Cambiar a Free
+                        </a>
+                    <% } %>
+                <% } else { %>
+                    <a href="/register?plan=free" class="btn-pricing btn-free">
+                        <i class="fas fa-user-plus"></i> Empezar Gratis
+                    </a>
+                <% } %>
             </div>
 
             <!-- Plan Premium -->
@@ -405,14 +302,26 @@
                     <li><i class="fas fa-check"></i> Soporte prioritario 24/7</li>
                 </ul>
                 
-                <button onclick="startPremiumPayment()" class="btn-pricing btn-premium">
-                    <i class="fas fa-credit-card"></i> Contratar Premium
-                </button>
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <% if (user.plan === 'premium') { %>
+                        <button class="btn-pricing btn-premium" disabled>
+                            <i class="fas fa-check"></i> Plan Actual
+                        </button>
+                    <% } else { %>
+                        <button onclick="startPremiumPayment()" class="btn-pricing btn-premium">
+                            <i class="fas fa-credit-card"></i> Actualizar a Premium
+                        </button>
+                    <% } %>
+                <% } else { %>
+                    <a href="/register?plan=premium" class="btn-pricing btn-premium">
+                        <i class="fas fa-crown"></i> Contratar Premium
+                    </a>
+                <% } %>
             </div>
         </div>
 
         <div class="navigation-links">
-            <% if (user) { %>
+            <% if (typeof user !== 'undefined' && user) { %>
                 <a href="/account" class="nav-link">
                     <i class="fas fa-arrow-left"></i> Volver a Mi Cuenta
                 </a>
@@ -432,7 +341,7 @@
 
     <script>
         function startPremiumPayment() {
-            if (confirm('¿Quieres contratar el plan Premium por 3€/mes?\n\nSerás redirigido a completar el pago.')) {
+            if (confirm('¿Quieres actualizar al plan Premium por 3€/mes?\n\nSerás redirigido a completar el pago.')) {
                 window.location.href = '/account?upgrade=premium';
             }
         }
