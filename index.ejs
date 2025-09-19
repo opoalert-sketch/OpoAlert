@@ -4,164 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpoAlert - Monitor de Cambios Web</title>
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #2c3e50;
-            --accent: #e74c3c;
-            --success: #2ecc71;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f7ff;
-            color: var(--dark);
-            line-height: 1.6;
-            padding-bottom: 60px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 20px 0;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo i {
-            margin-right: 10px;
-            font-size: 28px;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 20px;
-        }
-        
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.3s;
-        }
-        
-        nav ul li a:hover {
-            opacity: 0.8;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .user-welcome {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-        
-        .user-plan {
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 11px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        
-        .user-plan.free {
-            background: #27ae60;
-            color: white;
-        }
-        
-        .user-plan.premium {
-            background: #f39c12;
-            color: white;
-        }
-        
-        .user-actions {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .btn-user {
-            color: white;
-            text-decoration: none;
-            padding: 8px;
-            border-radius: 50%;
-            transition: all 0.3s;
-        }
-        
-        .btn-user:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .user-auth-links {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn-login, .btn-register {
-            padding: 8px 15px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .btn-login {
-            background: transparent;
-            border: 2px solid white;
-            color: white;
-        }
-        
-        .btn-register {
-            background: white;
-            color: var(--primary);
-        }
-        
-        .btn-login:hover {
-            background: white;
-            color: var(--primary);
-        }
-        
+        /* Estilos específicos para index.ejs */
         .login-indicator {
             position: fixed;
             top: 10px;
@@ -258,24 +104,6 @@
             margin-right: 10px;
         }
         
-        .btn {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .btn:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-        }
-        
         .url-list {
             width: 100%;
             border-collapse: collapse;
@@ -330,14 +158,6 @@
             color: var(--primary);
         }
         
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px;
-            color: var(--gray);
-            border-top: 1px solid #eee;
-        }
-        
         .ads-container {
             background: #f8f9fa;
             border-top: 1px solid #e9ecef;
@@ -351,25 +171,54 @@
             margin: 0 auto;
         }
         
+        .user-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-user {
+            color: white;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .btn-user:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .user-auth-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-login, .btn-register {
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-login {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        .btn-register {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .btn-login:hover {
+            background: white;
+            color: var(--primary);
+        }
+        
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            nav ul {
-                margin-top: 15px;
-                justify-content: center;
-            }
-            
-            nav ul li {
-                margin: 0 10px;
-            }
-            
-            .user-info {
-                margin-top: 15px;
-            }
-            
             .hero h1 {
                 font-size: 2rem;
             }
@@ -378,7 +227,7 @@
 </head>
 <body>
     <!-- Indicador de login -->
-    <% if (user) { %>
+    <% if (typeof user !== 'undefined' && user) { %>
     <div class="login-indicator">
         <i class="fas fa-user-check"></i>
         Conectado como: <%= user.email %>
@@ -393,14 +242,14 @@
             <nav>
                 <ul>
                     <li><a href="/" class="active">Inicio</a></li>
-                    <li><a href="/pricing.html">Precios</a></li>
-                    <li><a href="/help.html">Ayuda</a></li>
-                    <li><a href="/contact.html">Contacto</a></li>
+                    <li><a href="/pricing">Precios</a></li>
+                    <li><a href="/help">Ayuda</a></li>
+                    <li><a href="/contact">Contacto</a></li>
                 </ul>
             </nav>
             
             <div class="user-info">
-                <% if (user) { %>
+                <% if (typeof user !== 'undefined' && user) { %>
                     <div class="user-welcome">
                         <i class="fas fa-user"></i>
                         Hola, <strong><%= user.email %></strong>
@@ -412,8 +261,8 @@
                     </div>
                 <% } else { %>
                     <div class="user-auth-links">
-                        <a href="/login.html" class="btn-login">Iniciar Sesión</a>
-                        <a href="/register.html" class="btn-register">Registrarse</a>
+                        <a href="/login" class="btn-login">Iniciar Sesión</a>
+                        <a href="/register" class="btn-register">Registrarse</a>
                     </div>
                 <% } %>
             </div>
@@ -482,19 +331,45 @@
                     </tr>
                 </thead>
                 <tbody id="urls-container">
-                    <tr>
-                        <td colspan="5" style="text-align: center; padding: 30px; color: var(--gray);">
-                            <i class="fas fa-inbox fa-3x" style="margin-bottom: 15px;"></i>
-                            <p>No tienes URLs monitorizadas todavía</p>
-                        </td>
-                    </tr>
+                    <% if (typeof userUrls !== 'undefined' && userUrls && userUrls.length > 0) { %>
+                        <% userUrls.forEach(function(url) { %>
+                            <tr>
+                                <td><%= url.url %></td>
+                                <td>
+                                    <span class="status status-<%= url.status || 'inactive' %>">
+                                        <%= url.status === 'active' ? 'Activa' : 'Inactiva' %>
+                                    </span>
+                                </td>
+                                <td><%= url.notificationType === 'both' ? 'Email y Telegram' : url.notificationType %></td>
+                                <td><%= url.lastChecked ? new Date(url.lastChecked).toLocaleString() : 'Nunca' %></td>
+                                <td class="actions">
+                                    <button title="Editar" onclick="editUrl('<%= url._id %>')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button title="Eliminar" onclick="deleteUrl('<%= url._id %>')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 30px; color: var(--gray);">
+                                <i class="fas fa-inbox fa-3x" style="margin-bottom: 15px;"></i>
+                                <p>No tienes URLs monitorizadas todavía</p>
+                                <% if (typeof user === 'undefined' || !user) { %>
+                                    <p><a href="/login" style="color: var(--primary);">Inicia sesión</a> para ver tus URLs guardadas</p>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% } %>
                 </tbody>
             </table>
         </div>
     </div>
 
     <!-- Anuncios para usuarios free -->
-    <% if (showAds) { %>
+    <% if (typeof showAds !== 'undefined' && showAds) { %>
     <div class="ads-container">
         <div class="container">
             <div class="ads-content">
@@ -502,7 +377,7 @@
                 <div style="background: white; padding: 20px; border-radius: 10px; border: 1px dashed #ddd;">
                     <p style="margin: 0; color: var(--gray);">
                         🚀 <strong>¿Cansado de anuncios?</strong> 
-                        <a href="/pricing.html" style="color: var(--primary); text-decoration: none;">
+                        <a href="/pricing" style="color: var(--primary); text-decoration: none;">
                             Hazte Premium por solo 3€/mes
                         </a>
                     </p>
@@ -514,7 +389,7 @@
 
     <footer>
         <div class="container">
-            <p>OpoAlert &copy; 2023 - Monitoriza cambios en tus páginas web favoritas</p>
+            <p>OpoAlert &copy; 2025 - Monitoriza cambios en tus páginas web favoritas</p>
         </div>
     </footer>
 
@@ -577,7 +452,7 @@
                     if (data.success) {
                         alert('URL añadida correctamente. Se verificará diariamente a las 12:00.');
                         urlForm.reset();
-                        window.location.href = '/account';
+                        window.location.reload();
                     } else {
                         alert('Error: ' + data.error);
                     }
@@ -586,6 +461,30 @@
                 }
             });
         });
+        
+        function editUrl(urlId) {
+            alert('Funcionalidad de edición en desarrollo para URL: ' + urlId);
+        }
+        
+        function deleteUrl(urlId) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta URL?')) {
+                fetch('/api/urls/' + urlId, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('URL eliminada correctamente');
+                        window.location.reload();
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    alert('Error de conexión');
+                });
+            }
+        }
     </script>
 </body>
 </html>
