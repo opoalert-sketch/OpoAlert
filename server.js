@@ -6,38 +6,39 @@ const path = require('path');
 const cron = require('node-cron');
 const axios = require('axios');
 const cheerio = require('cheerio');
+require('dotenv').config(); // Añadir para variables de entorno
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Configuración
 app.set('view engine', 'ejs');
-app.set('views', __dirname);
+app.set('views', path.join(__dirname, 'views')); // Mejor organización
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, 'public'))); // Servir archivos estáticos desde public
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'opoalert-secret-key-2024',
+    secret: process.env.SESSION_SECRET || 'opoalert-secret-key-2025',
     resave: false,
     saveUninitialized: false,
     cookie: { 
-        secure: false,
+        secure: process.env.NODE_ENV === 'production',
         maxAge: 24 * 60 * 60 * 1000
     }
 }));
 
 // Variables globales
 let client;
-const mongoUri = process.env.MONGODB_URI;
+const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/opoalert';
 
 // Conectar a MongoDB
 async function connectDB() {
     try {
         client = new MongoClient(mongoUri);
         await client.connect();
-        console.log('✅ Conectado a MongoDB Atlas');
+        console.log('✅ Conectado a MongoDB');
         return client;
     } catch (error) {
         console.error('❌ Error conectando a MongoDB:', error);
@@ -45,7 +46,7 @@ async function connectDB() {
     }
 }
 
-// Middleware para anuncios y user
+// Middleware para user y anuncios
 app.use(async (req, res, next) => {
     if (req.session.userId) {
         try {
@@ -79,31 +80,52 @@ app.use(async (req, res, next) => {
 
 // Rutas principales
 app.get('/', async (req, res) => {
-    if (!res.locals.user) {
-        return res.redirect('/login.html');
+    try {
+        if (!res.locals.user) {
+            return res.render('index', { 
+                user: null, 
+                userUrls: [] 
+            });
+        }
+
+        const db = client.db();
+        const userUrls = await db.collection('urls')
+            .find({ userId: req.session.userId })
+            .sort({ createdAt: -1 })
+            .toArray();
+
+        res.render('index', { 
+            user: res.locals.user, 
+            userUrls: userUrls 
+        });
+    } catch (error) {
+        console.error('Error loading home:', error);
+        res.render('index', { 
+            user: res.locals.user, 
+            userUrls: [] 
+        });
     }
-    res.render('index', { user: res.locals.user });
 });
 
-// Servir archivos estáticos
-app.get('/register.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'register.html'));
+// Rutas de páginas (sin .html)
+app.get('/register', (req, res) => {
+    res.render('register');
 });
 
-app.get('/login.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'login.html'));
+app.get('/login', (req, res) => {
+    res.render('login');
 });
 
-app.get('/pricing.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pricing.html'));
+app.get('/pricing', (req, res) => {
+    res.render('pricing', { user: res.locals.user });
 });
 
-app.get('/help.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'help.html'));
+app.get('/help', (req, res) => {
+    res.render('help');
 });
 
-app.get('/contact.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'contact.html'));
+app.get('/contact', (req, res) => {
+    res.render('contact');
 });
 
 // API - Registro de usuario
@@ -115,6 +137,17 @@ app.post('/api/register', async (req, res) => {
             return res.status(400).json({ error: 'Email y contraseña son requeridos' });
         }
 
+        // Validar email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ error: 'Email no válido' });
+        }
+
+        // Validar contraseña
+        if (password.length < 8) {
+            return res.status(400).json({ error: 'La contraseña debe tener al menos 8 caracteres' });
+        }
+
         const db = client.db();
         const usersCollection = db.collection('users');
 
@@ -123,7 +156,7 @@ app.post('/api/register', async (req, res) => {
             return res.status(400).json({ error: 'El usuario ya existe' });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 12);
         
         const result = await usersCollection.insertOne({
             email,
@@ -186,7 +219,7 @@ app.post('/api/login', async (req, res) => {
 // Ruta para el panel de cuenta
 app.get('/account', async (req, res) => {
     if (!req.session.userId) {
-        return res.redirect('/login.html');
+        return res.redirect('/login');
     }
     
     try {
@@ -194,6 +227,11 @@ app.get('/account', async (req, res) => {
         const user = await db.collection('users').findOne({ 
             _id: new ObjectId(req.session.userId) 
         });
+        
+        if (!user) {
+            req.session.destroy();
+            return res.redirect('/login');
+        }
         
         const userUrls = await db.collection('urls').find({ 
             userId: req.session.userId 
@@ -205,11 +243,11 @@ app.get('/account', async (req, res) => {
                 email: user.email,
                 plan: user.plan
             },
-            urls: userUrls
+            userUrls: userUrls
         });
     } catch (error) {
         console.error('Error loading account:', error);
-        res.redirect('/');
+        res.redirect('/login');
     }
 });
 
@@ -221,6 +259,14 @@ app.post('/api/urls', async (req, res) => {
     
     try {
         const { url, notificationEmail, telegramId, notificationType } = req.body;
+        
+        // Validar URL
+        try {
+            new URL(url);
+        } catch (error) {
+            return res.status(400).json({ error: 'URL no válida' });
+        }
+        
         const db = client.db();
         
         // Verificar límite según plan
@@ -254,7 +300,7 @@ app.post('/api/urls', async (req, res) => {
         const result = await db.collection('urls').insertOne({
             userId: req.session.userId,
             url: url,
-            notificationEmail: notificationEmail,
+            notificationEmail: notificationEmail || user.email,
             telegramId: telegramId,
             notificationType: notificationType || 'email',
             checkTime: '12:00',
@@ -269,7 +315,7 @@ app.post('/api/urls', async (req, res) => {
         res.json({ 
             success: true, 
             message: 'URL añadida correctamente',
-            redirect: '/account'  // Redirigir a account en lugar de home
+            redirect: '/account'
         });
         
     } catch (error) {
@@ -278,27 +324,7 @@ app.post('/api/urls', async (req, res) => {
     }
 });
 
-// Nueva ruta para obtener URLs del usuario
-app.get('/api/user/urls', async (req, res) => {
-    if (!req.session.userId) {
-        return res.status(401).json({ error: 'No autorizado' });
-    }
-    
-    try {
-        const db = client.db();
-        const urls = await db.collection('urls')
-            .find({ userId: req.session.userId })
-            .sort({ createdAt: -1 })
-            .toArray();
-        
-        res.json({ success: true, urls });
-    } catch (error) {
-        console.error('Error fetching URLs:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-});
-
-// Añadir esta ruta en server.js
+// API para obtener URLs del usuario
 app.get('/api/user/urls', async (req, res) => {
     if (!req.session.userId) {
         return res.status(401).json({ error: 'No autorizado' });
@@ -326,10 +352,14 @@ app.delete('/api/urls/:id', async (req, res) => {
     
     try {
         const db = client.db();
-        await db.collection('urls').deleteOne({
+        const result = await db.collection('urls').deleteOne({
             _id: new ObjectId(req.params.id),
             userId: req.session.userId
         });
+        
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'URL no encontrada' });
+        }
         
         res.json({ success: true, message: 'URL eliminada correctamente' });
     } catch (error) {
@@ -347,7 +377,7 @@ app.post('/api/upgrade-to-premium', async (req, res) => {
     try {
         const db = client.db();
         
-        await db.collection('users').updateOne(
+        const result = await db.collection('users').updateOne(
             { _id: new ObjectId(req.session.userId) },
             { 
                 $set: { 
@@ -357,6 +387,10 @@ app.post('/api/upgrade-to-premium', async (req, res) => {
                 } 
             }
         );
+
+        if (result.modifiedCount === 0) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
 
         req.session.userPlan = 'premium';
         
@@ -378,11 +412,11 @@ app.get('/logout', (req, res) => {
         if (err) {
             console.error('Error cerrando sesión:', err);
         }
-        res.redirect('/login.html');
+        res.redirect('/login');
     });
 });
 
-// Función para generar hash del contenido (usando crypto nativo de Node.js)
+// Función para generar hash del contenido
 function generateHash(content) {
     const crypto = require('crypto');
     return crypto.createHash('md5').update(content).digest('hex');
@@ -396,7 +430,7 @@ async function checkUrl(urlData) {
         const response = await axios.get(urlData.url, {
             timeout: 30000,
             headers: {
-                'User-Agent': 'OpoAlert-Bot/1.0 (+https://opoalert.com)'
+                'User-Agent': 'Mozilla/5.0 (compatible; OpoAlert-Bot/1.0; +https://opoalert.com)'
             }
         });
         
@@ -491,6 +525,7 @@ cron.schedule('0 12 * * *', async () => {
             try {
                 const result = await checkUrl(urlData);
                 
+                // Pequeña pausa entre verificaciones
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 
             } catch (error) {
@@ -507,12 +542,26 @@ cron.schedule('0 12 * * *', async () => {
     timezone: "Europe/Madrid"
 });
 
+// Manejo de errores 404
+app.use((req, res) => {
+    res.status(404).render('404', { user: res.locals.user });
+});
+
+// Manejo de errores global
+app.use((err, req, res, next) => {
+    console.error('Error no manejado:', err);
+    res.status(500).render('error', { 
+        user: res.locals.user,
+        message: 'Algo salió mal. Por favor, intenta nuevamente.'
+    });
+});
+
 // Iniciar servidor
 async function startServer() {
     try {
         await connectDB();
         app.listen(PORT, () => {
-            console.log(`🚀 OpoAlert ejecutándose en puerto ${PORT}`);
+            console.log(`🚀 OpoAlert ejecutándose en http://localhost:${PORT}`);
             console.log('⏰ Verificación programada: 12:00 daily (Europe/Madrid)');
         });
     } catch (error) {
